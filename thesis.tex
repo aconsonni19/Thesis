@@ -1,0 +1,62 @@
+\documentclass[11pt, a4paper, oneside]{report}
+\usepackage{graphicx} % allows inserting graphics
+\usepackage{listings}
+\usepackage{algpseudocode} % allows code snippets
+\usepackage{algorithm}
+\usepackage{hyperref} % allows
+\usepackage{subcaption} 
+\usepackage[export]{adjustbox} 
+\usepackage{wrapfig} % allows warped figures
+\usepackage[acronym]{glossaries} % add glossary
+\usepackage{acronym} % add acronyms
+\usepackage{subfiles} % support multiple files
+\usepackage{fancyhdr} % more control on headers and footers
+\usepackage{xcolor}
+\usepackage[
+backend=biber,
+style=ieee,
+sorting=ynt
+]{biblatex}
+\usepackage{ragged2e}
+\addbibresource{sample.bib}
+\pagestyle{plain} %oppure none
+
+\graphicspath{ {./images/} }
+
+\newenvironment{zerotext}[1]
+ {\dimen0=\parindent
+  \par\noindent
+  \begin{minipage}[#1][0pt]{\textwidth}
+  \parindent=\dimen0}
+ {\end{minipage}}
+
+\begin{document}
+    \subfile{frontispiece.tex}
+    \thispagestyle{empty}
+    \vspace*{\fill}
+    \vspace*{-4.5cm}
+    \begin{Center}
+        \begin{minipage}{\textwidth}
+            \centering
+            \itshape
+            Vorrei esprimere i miei più sentiti ringraziamenti al \textbf{prof. Claudio Ferretti}, alla \textbf{Dott.sa Martina Saletta} e al \textbf{prof. Giovanni Denaro} per il costante supporto, la disponibilità e i preziosi consigli offerti durante tutto il percorso di tesi.
+            \newline \vspace*{1.5em}
+            Un ringraziamento speciale va alla \textbf{mia famiglia}, che con il suo supporto incondizionato mi ha permesso di affrontare con serenità questo percorso di studi. \newline \vspace*{1.5em}
+            Sono profondamente grato anche \textbf{a tutti i miei amici}, il quale costante sostegno mi ha accompagnato e incoraggiato lungo tutto il percorso universitario
+        \end{minipage}
+    \end{Center}
+    \vspace*{\fill}
+    \newpage
+    \vspace*{\fill}
+    \vspace*{-4cm}
+    \begin{Center}
+        \begin{minipage}{\textwidth}
+            \centering
+            \textbf{Abstract}
+            
+        \end{minipage}
+    \end{Center}
+
+
+    \vspace*{\fill}
+\end{document}

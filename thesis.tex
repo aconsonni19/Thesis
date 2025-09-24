@@ -1,4 +1,7 @@
-\documentclass[11pt, a4paper, oneside]{report}
+\documentclass[12pt, a4paper, oneside]{report}
+\usepackage[paper=a4paper,margin=1in]{geometry}
+\usepackage{csquotes}
+\usepackage[italian]{babel}
 \usepackage{graphicx} % allows inserting graphics
 \usepackage{listings}
 \usepackage{algpseudocode} % allows code snippets
@@ -18,17 +21,12 @@ style=ieee,
 sorting=ynt
 ]{biblatex}
 \usepackage{ragged2e}
+\usepackage{fancyhdr}
 \addbibresource{sample.bib}
-\pagestyle{plain} %oppure none
+\pagestyle{fancy} %oppure none
 
 \graphicspath{ {./images/} }
 
-\newenvironment{zerotext}[1]
- {\dimen0=\parindent
-  \par\noindent
-  \begin{minipage}[#1][0pt]{\textwidth}
-  \parindent=\dimen0}
- {\end{minipage}}
 
 \begin{document}
     \subfile{frontispiece.tex}
@@ -47,16 +45,22 @@ sorting=ynt
     \end{Center}
     \vspace*{\fill}
     \newpage
+    \clearpage
+    % Abstract
+    \thispagestyle{empty}
     \vspace*{\fill}
     \vspace*{-4cm}
     \begin{Center}
         \begin{minipage}{\textwidth}
             \centering
-            \textbf{Abstract}
-            
+            \textbf{Abstract} \newline
+            TODO % TODO: Da scrivere dopo aver finito la tesi
         \end{minipage}
     \end{Center}
-
-
     \vspace*{\fill}
+    \tableofcontents
+    \chapter{Introduzione}
+    \markboth{Introduzione}{Capitolo 1}
+
+
 \end{document}

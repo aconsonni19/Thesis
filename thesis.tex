@@ -18,15 +18,15 @@
 \usepackage[
 backend=biber,
 style=ieee,
-sorting=ynt
+sorting=none,
 ]{biblatex}
 \usepackage{ragged2e}
 \usepackage{fancyhdr}
-\addbibresource{sample.bib}
 \pagestyle{fancy} %oppure none
 
 \graphicspath{ {./images/} }
 
+\addbibresource{./bibfile.bib}
 
 \begin{document}
     \subfile{frontispiece.tex}
@@ -54,15 +54,21 @@ sorting=ynt
         \begin{minipage}{\textwidth}
             \centering
             \textbf{Abstract} \newline
-            TODO % TODO: Da scrivere dopo aver finito la tesi
+            Il compito di analisi
         \end{minipage}
     \end{Center}
     \vspace*{\fill}
     \addtocounter{page}{-2}
+
     \tableofcontents
+    \thispagestyle{empty}
+    \addtocounter{page}{-1}
     % Capitolo 1
     \subfile{chapters/1-Introduzione.tex}
-    
+    % Capitolo 2
+    \subfile{chapters/2-stato_dell_arte.tex}
 
-
+    \printbibliography[
+        heading=bibintoc
+    ]
 \end{document}

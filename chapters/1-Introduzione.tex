@@ -1,9 +1,10 @@
 \documentclass[../main.tex]{subfiles}
+\addbibresource{../bibfile.bib}
 
 \begin{document}
 
 \chapter{Introduzione}
-\markboth{Capitolo 1}{}
+\markboth{Capitolo 1}{\null}
 \label{chap:intro}
 In un mondo sempre più digitalizzato ed interconnesso, la tematica della sicurezza informatica ha assunto sempre più un'importanza chiave in ogni processo di sviluppo software. 
 La potenziale presenza e lo sfruttamento di una vulnerabilità all'interno di un'applicazione da parte di un'attaccante potrebbe avere conseguenze disastrose: dall'escalation di privilegi
@@ -18,7 +19,18 @@ Questa tesi propone l'implementazione di una piattaforma web per l'analisi di fi
 semplificare il processo di analisi di sicurezza su file binari ELF compilati per architettura x86 tramite un'interfaccia semplice ed intuitiva, permettendo anche ad analisti con competenze di sicurezza non specialistiche di 
 effettuare una prima valutazione del programma, la quale potrà poi essere approfondita tramite analisi più specifiche.
 La piattaforma si basa su \textbf{angr}, un toolkit open-source multi-architettura per l'analisi binaria, per eseguire automaticamente diverse tipologie di analisi statiche e dinamiche, sul framework python \textbf{Flask} per l'implementazione di una REST API progettata per 
-comunicare i risultati dell'analisi e sul framework javascript SvelteKit, il quale si occupa della strutturazione delle pagine web della piattaforma e della presentazione dei risultati dell'analisi all'utente.
+comunicare i risultati dell'analisi e sul framework javascript \textbf{SvelteKit}, il quale si occupa della strutturazione delle pagine web della piattaforma e della presentazione dei risultati dell'analisi all'utente.
+\section{Differenza tra debolezza e vulnerabilità}
+Spesso il termine "vulnerabilità" è utilizzato per riferirsi ad una qualsiasi problematica di sicurezza all'interno del software sotto analisi.
+Tuttavia, è fondamentale distinguere il concetto di \textbf{vulnerabilità} da quello di \textbf{debolezza}.
+Per delineare con precisione questa distinzione, adotteremo le definizioni fornite dal glossario compilato dal MITRE \cite{mitre_glossary}:
+\begin{itemize}
+    \item \textbf{Debolezza}: Una condizione nel software, firmware, hardware o in una componente di servizio che, sotto certe circostanze, potrebbe contribuire all'introduzione di vulnerabilità
+    \item \textbf{Vulnerabilità}: Un errore nel software, firmware, hardware o componente di servizio \textbf{derivante dalla presenza di una debolezza} che può essere sfruttata da un'attaccante, causando un impatto negativo sull'integrità, la confidenzialità e la disponibilità dei componenti impattati
+\end{itemize}
+Una vulnerabilità è quindi \textbf{un'istanza sfruttabile di una debolezza}.
+Per riferirci alle categorie di difetti che le tecniche di analisi automatica offerte dalla piattaforma sono in grado di rivelare, questa tesi adotterà la tassonomia \textbf{Common Weakness Enumeration} (CWE), anch'essa compilata dal MITRE.
+
 \section{Struttura della relazione}
 La relazione è articolata nei seguenti capitoli:
 \begin{itemize}
@@ -26,24 +38,10 @@ La relazione è articolata nei seguenti capitoli:
     rispettivi limiti di ogni soluzione presentata.
     \item \textbf{Capitolo 3: Metodologie utilizzate}: Questo capitolo discute i fondamenti teorici che costituiscono la base delle analisi implementate dalla piattaforma. Saranno discussi in dettaglio sia i concetti di \textbf{disassembling} e \textbf{decompiling} sia
     le metodologie di analisi statica e dinamica utilizzate per effettuare la ricerca delle vulnerabilità. Verranno inoltre forniti degli esempi per illustrarne il funzionamento.
-    \item \textbf{Capitolo 4: Analisi implementate}: Questo capitolo illustra nel dettaglio le analisi implementate all'interno della piattaforma. Verrà descritto come ciascuna tecnica di analisi porti al rilevamento di una vulnerabilità e quali classi di vulnerabilità ogni tecnica è in grado di rilevare.
-    \item \textbf{Capitolo 5: Tecnologie utilizzate}: Questo capitolo presenta in dettaglio le tecnologie e i framework scelti per l'implementazione della piattaforma. Saranno presentati sia i componenti del backend sia le tecnologie adottate per lo sviluppo del frontend.
+    \item \textbf{Capitolo 4: Tecnologie utilizzate}: Questo capitolo presenta in dettaglio le tecnologie e i framework scelti per l'implementazione della piattaforma. Saranno presentati sia i componenti del backend sia le tecnologie adottate per lo sviluppo del frontend.
+    \item \textbf{Capitolo 5: Analisi implementate}: Questo capitolo illustra nel dettaglio le analisi implementate all'interno della piattaforma. Verrà descritto come ciascuna tecnica di analisi porti al rilevamento di una vulnerabilità e verrà fornita una lista comprensiva di tutte le debolezza software che ogni tecnica è capace di rilevare.
     \item \textbf{Capitolo 6: Architettura della soluzione}: Questo capitolo descrive l'architettura generale della piattaforma Binoculars. Verrà illustrato il modello architetturale della soluzione, illustrando le interazioni fra i vari componenti e come essi collaborano per presentare all'utente il risultato dell'analisi richiesta    
     \item \textbf{Capitolo 7: Sperimentazione} Questo capitolo presenta le varie sperimentazioni effettuate sulla piattaforma al fine di validarne l'accuratezza. Per ogni tecnica di analisi implementata, verranno presentati i programmi che sono stati utilizzati al fine di validare l'efficacia e l'accuratezza dell'analisi e i risultati prodotti da quest'ultima 
     \item \textbf{Capitolo 8: Conclusioni}: Questo capitolo presenterà le conclusioni finali del lavoro. Saranno inoltre esposte le limitazioni e le problematiche incontrate durante l'implementazione della piattaforma e i suoi possibili sviluppi futuri
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{document}

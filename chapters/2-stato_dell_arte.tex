@@ -1,0 +1,59 @@
+\documentclass[../main.tex]{subfiles}
+\addbibresource{../bibfile.bib}
+
+\begin{document}
+
+
+\chapter{Stato dell'arte}
+\markboth{Capitolo 2}{}
+\label{chap:related}
+% TODO: Mettere una descrizione di tutti gli approcci trovati
+\section{Metodologie basate su tecniche di analisi statica}
+L'analisi statica di un programma consiste in un'insieme di metodologie, tool e algoritmi che permettono l'analisi del codice sorgente o della
+sua rappresentazione binaria (per esempio, un file eseguibile) senza che il programma venga effettivamente eseguito \cite{static_analysis_introduction}.
+Questa tecnica è ampiamente adottata nell'ambito della ricerca delle vulnerabilità, in quanto consente di inferire e determinare se
+certe proprietà sono soddisfatte (per esempio, le condizioni che possono portare ad una certa vulnerabilità) senza direttamente eseguire il programma.
+Tuttavia, l'analisi statica condotta direttamente su un file binario è intrinsecamente più complessa rispetto all'analisi statica del codice sorgente:
+la principale difficoltà risiede nella mancanza di informazioni riguardante i tipi e la struttura ad alto livello del codice \cite{Review_of_static_analysis}.
+Nonostante queste sfide, nel corso degli anni sono stati sviluppati diversi approcci e metodologie di analisi statica progettati per effettuare la ricerca di vulnerabilità all'interno di file binari.
+Le tecniche di analisi statica, tuttavia, possono produrre un elevato numero di falsi positivi e falsi negativi : poiché queste tecniche non effettuano un'esecuzione concreta del programma,
+esse devono effettuare diverse assunzioni sul suo stato a runtime. Ciò potrebbe quindi portare i tool basati su questa tipologia di analisi a segnalare vulnerabilità in porzioni di programma non vulnerabili.
+\subsection{Taint analysis statica: Bintaint}
+La \textit{taint analysis} (o \textit{taint checking}) è una tecnica di analisi che mira a tracciare e monitorare la propagazione di flussi di dati inaffidabili o 
+potenzialmente dannosi all'interno del programma. La taint analysis si compone di tre elementi chiave:
+\begin{enumerate}
+    \item \textbf{Sorgenti} (Sources): Sono i punti del programma dove si origina un flusso di dati inaffidabile. Una sorgente potrebbe per esempio essere l'input di un utente oppure i dati
+    letti da un file.
+    \item \textbf{Propagazione}: Viene effettuato un monitoraggio continuo della propagazione nel programma dei dati provenienti da una sorgente
+    \item \textbf{Sink}: Sono i punti del programma che effettuano operazioni sensibili, come per esempio l'accesso al filesystem o la chiamata ad operazioni di libreria non sicure. 
+\end{enumerate}
+Una possibile vulnerabilità verrà quindi rilevata quando il programma permette ad un dato "tainted" di raggiungere un sink; ciò può avvenire quando, per esempio, il dato
+non viene adeguatamente sanificato.
+\newline
+\textbf{Bintaint} è un tool di parsing capace di effettuare taint analysis statica su file binari  \cite{Bintaint}.
+Il taint analyzer proposto implementato dal tool è basato sul tool commerciale di reverse engineering \textit{IDA}, il quale viene utilizzato per recuperare il codice assembly dal codice binario, 
+ed è implementato utilizzando il linguaggio funzionale \textit{OCaml}.
+Bintaint è composto da quattro moduli distinti:
+\begin{itemize}
+    \item \textbf{Decoder module}: Questo modulo si occupa di tradurre il codice assembly recuperato da IDA in una rappresentazione in un linguaggio intermedio chiamato \textit{REIL} (Reverse Engineering Intermediate Language), 
+    le quali espressioni verranno a loro volta convertite in espressioni simboliche.
+    \item \textbf{Taint Processing Configuration Module}: Questo modulo gestisce la configurazione per l'inizializzazione della taint analysis, leggendo la configurazione fornita dall'utente in formato XML, la quale
+    dovrà contenere tutte le informazioni necessarie per effettuare la taint analysis. Questo modulo si occupa inoltre di stabilire una relazione tra l'input esterno e le varie sorgenti definite
+    \item \textbf{Expression Parsing Module}: Questo modulo si occupa di definire come avviene la propagazione dei flussi di dati tainted all'interno del programma
+    \item \textbf{TCFG Generation Module}: Questo modulo si occupa di generare una struttura a grafo diretta chiamata \textit{Taint Control Flow Graph}, la quale rappresenterà tutte le possibili aree del programma che un determinato flusso tainted può raggiungere.
+    L'analisi del TCFG permetterà quindi di evincere se un determinato sink dipende dai dati generati da una determinata sorgente.
+\end{itemize}
+L'approccio proposto dal tool permette di ridurre il numero di falsi positivi e falsi negativi rilevati rispetto ad una tain analysis tradizionale; inoltre, l'utilizzo del linguaggio intermedio REIL
+permette al tool di essere facilmente integrabile in sistemi di analisi più complessi, a patto che anch'essi utilizzino lo stesso linguaggio di rappresentazione intermedia. 
+Tuttavia il tool risulta comunque dipendente dall'input dell'analista; l'accuratezza dell'analisi dipenderà quindi dalla corretta definizione di sorgenti, sink e propagazione da parte
+di quest'ultimo. Infine, Bintaint si basa sul framework commerciale IDA, il quale non offre tutte le sue funzionalità nella sua versione gratuita.
+
+
+
+
+
+
+
+
+
+\end{document}

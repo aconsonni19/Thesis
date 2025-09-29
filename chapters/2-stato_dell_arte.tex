@@ -7,16 +7,19 @@
 \chapter{Stato dell'arte}
 \markboth{Capitolo 2}{}
 \label{chap:related}
-% TODO: Mettere una descrizione di tutti gli approcci trovati
+Questo capitolo tratta una rassegna di alcune metodologie, tecniche e soluzioni attualmente disponibili per risolvere il problema della ricerca automatica di vulnerabilità in file binari.
+Verranno in particolare approfonditi alcuni approcci basati su analisi statica, analisi dinamica e su tecniche di apprendimento automatico.
+Per ciascuna metodologia presentata, verranno dettagliati il suo funzionamento generale, le sue capacità di analisi e le sue limitazioni
+
 \section{Metodologie basate su tecniche di analisi statica}
 L'analisi statica di un programma consiste in un'insieme di metodologie, tool e algoritmi che permettono l'analisi del codice sorgente o della
 sua rappresentazione binaria (per esempio, un file eseguibile) senza che il programma venga effettivamente eseguito \cite{static_analysis_introduction}.
 Questa tecnica è ampiamente adottata nell'ambito della ricerca delle vulnerabilità, in quanto consente di inferire e determinare se
 certe proprietà sono soddisfatte (per esempio, le condizioni che possono portare ad una certa vulnerabilità) senza direttamente eseguire il programma.
 Tuttavia, l'analisi statica condotta direttamente su un file binario è intrinsecamente più complessa rispetto all'analisi statica del codice sorgente:
-la principale difficoltà risiede nella mancanza di informazioni riguardante i tipi e la struttura ad alto livello del codice \cite{Review_of_static_analysis}.
+le principali difficoltà risiedono nella mancanza di informazioni riguardante i tipi e la struttura ad alto livello del codice \cite{Review_of_static_analysis} e nella necessità di gestire e rappresentare adeguatamente le operazioni riguardanti la memoria \cite{CodeSurfer}.
 Nonostante queste sfide, nel corso degli anni sono stati sviluppati diversi approcci e metodologie di analisi statica progettati per effettuare la ricerca di vulnerabilità all'interno di file binari.
-Le tecniche di analisi statica, tuttavia, possono produrre un elevato numero di falsi positivi e falsi negativi : poiché queste tecniche non effettuano un'esecuzione concreta del programma,
+Queste tecniche, tuttavia, possono produrre un elevato numero di falsi positivi e falsi negativi : poiché non effettuano un'esecuzione concreta del programma,
 esse devono effettuare diverse assunzioni sul suo stato a runtime. Ciò potrebbe quindi portare i tool basati su questa tipologia di analisi a segnalare vulnerabilità in porzioni di programma non vulnerabili.
 \subsection{Taint analysis statica: Bintaint}
 La \textit{taint analysis} (o \textit{taint checking}) è una tecnica di analisi che mira a tracciare e monitorare la propagazione di flussi di dati inaffidabili o 
@@ -31,7 +34,7 @@ Una possibile vulnerabilità verrà quindi rilevata quando il programma permette
 non viene adeguatamente sanificato.
 \newline
 \textbf{Bintaint} è un tool di parsing capace di effettuare taint analysis statica su file binari  \cite{Bintaint}.
-Il taint analyzer proposto implementato dal tool è basato sul tool commerciale di reverse engineering \textit{IDA}, il quale viene utilizzato per recuperare il codice assembly dal codice binario, 
+Il taint analyzer proposto è basato sul tool commerciale di reverse engineering \textit{IDA}, il quale viene utilizzato per recuperare il codice assembly dal codice binario, 
 ed è implementato utilizzando il linguaggio funzionale \textit{OCaml}.
 Bintaint è composto da quattro moduli distinti:
 \begin{itemize}
@@ -47,9 +50,59 @@ L'approccio proposto dal tool permette di ridurre il numero di falsi positivi e 
 permette al tool di essere facilmente integrabile in sistemi di analisi più complessi, a patto che anch'essi utilizzino lo stesso linguaggio di rappresentazione intermedia. 
 Tuttavia il tool risulta comunque dipendente dall'input dell'analista; l'accuratezza dell'analisi dipenderà quindi dalla corretta definizione di sorgenti, sink e propagazione da parte
 di quest'ultimo. Infine, Bintaint si basa sul framework commerciale IDA, il quale non offre tutte le sue funzionalità nella sua versione gratuita.
+\subsection{Binary Code Similarity Detection: VulneraBin}
+Quando l'obbiettivo dell'analisi è ricercare una vulnerabilità nota (per esempio, una debolezza già documentata), è possibile adottare una strategia chiamata \textit{Binary Code Similarity Detection} (BCSD).
+Questo approccio si basa sul confronto il codice binario del programma in esame con la firma (il codice binario) della vulnerabilità.
+Se l'algoritmo di analisi rileva segmenti di codice con un elevato grado di somiglianza con la firma della vulnerabilità, allora è altamente probabile che il programma
+contenga quella vulnerabilità. Un algoritmo di decisione determinerà se il programma contiene effettivamente la vulnerabilità.
+Tuttavia, poiché il codice contente la vulnerabilità spesso richiede solo piccole modifiche per fare in modo che esso non sia più vulnerabile (l'aggiunta di un controllo, l'impostazione di permessi aggiuntivi, ...), il codice binario del programma corretto e il programma originale
+saranno molto simili; potenzialmente portando l'analizzatore a segnalare dei falsi positivi \cite{Survey_of_Binary_Code_Security_Analysis}. \newline
+\textit{VulneraBin} \cite{VulneraBin} è un tool che effettua un'analisi BCSD attraverso una metrica di similarità basata su hashing, strutturando il processo nelle seguenti fasi:
+\begin{enumerate}
+    \item \textbf{Re-ottimizzazione del linguaggio di rappresentazione intermedia (IR)}: Il codice assembly viene dapprima tradotto nel linguaggio di rappresentazione intermedia VEX-IR, il quale utilizzo
+    mira ad appiattire le eventuali differenze sintattiche derivanti dall'utilizzo di registri diversi, istruzioni diverse per l'assegnamento o metodologie di ottimizzazione introdotte dai vari compilatori.
+    Successivamente, viene applicata un'ulteriore ottimizzazione sul codice intermedio per eliminare le differenze residue che potrebbero ancora persistere a causa delle diverse tecniche di ottimizzazione dei compilatori.
+    \item \textbf{Program Slicing}: Il program slicing è una tecnica di anali statica che, partendo da un sottoinsieme dei comportamenti di un programma, ne produce una versione minimale, chiamata "slice",  la quale mantiene esattamente lo stesso sottoinsieme di comportamenti.
+    Poiché questa tecnica è alla base delle analisi offerte dalla piattaforma, verrà ulteriormente approfondita nel \textit{Capitolo 3} di questa tesi.
+    \item \textbf{Strand normalization}: Una "strand" è definita come l'insieme di istruzioni contigue richieste per computare il valore di una specifica variabile \cite{Statistical_similarities_in_binaries}.
+    Gli strand vengono normalizzati rinominando i registri utilizzati durante le varie operazioni, andando così ad eliminare eventuali differenze sintattiche introdotte dai compilatori
+    \item \textbf{Similarity evaluation}: Viene effettuato un confronto fra gli hash MD5 calcolati sugli strand normalizzati e gli hash delle vulnerabilità contenute in un database. Se la similarità supera una certa soglia definita manualmente, allora
+    il binario sarà considerato vulnerabile.
+\end{enumerate}
+Nonostante l'approccio proposto porti ad un miglioramento della complessità computazionale dell'analisi e alla mitigazione del numero di falsi positivi e negativi rilevati, l'affidabilità dell'analisi rimane comunque legata ad una soglia scelta manualmente dall'analista.
+Sarà quindi necessario che quest'ultimo imposti una soglia ottimale per ogni specifico binario o classe di vulnerabilità, compromettendo quindi l'automazione del processo.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Metodologie basate su tecniche di analisi dinamica}
+L'analisi dinamica consiste nell'osservare il comportamento di un determinato programma mentre esse viene eseguito in un determinato ambiente.
 
 
 

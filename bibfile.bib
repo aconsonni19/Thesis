@@ -54,3 +54,70 @@ isbn="978-3-031-44947-5"
   pages={1-8},
   keywords={Decoding;Data mining;Explosions;Tools;Pollution;Software;Flow graphs;taint analysis;vulnerability mining;path explosion},
   doi={10.1109/ICCBB.2018.8756383}}
+
+@inproceedings{CodeSurfer,
+author = {Balakrishnan, Gogul and Gruian, Radu and Reps, Thomas and Teitelbaum, Tim},
+title = {CodeSurfer/x86—A platform for analyzing x86 executables},
+year = {2005},
+isbn = {3540254110},
+publisher = {Springer-Verlag},
+address = {Berlin, Heidelberg},
+url = {https://doi.org/10.1007/978-3-540-31985-6_19},
+doi = {10.1007/978-3-540-31985-6_19},
+abstract = {CodeSurfer/x86 is a prototype system for analyzing x86 executables. It uses a static-analysis algorithm called value-set analysis (VSA) to recover intermediate representations that are similar to those that a compiler creates for a program written in a high-level language. A major challenge in building an analysis tool for executables is in providing useful information about operations involving memory. This is difficult when symbol-table and debugging information is absent or untrusted. CodeSurfer/x86 overcomes these challenges to provide an analyst with a powerful and flexible platform for investigating the properties and behaviors of potentially malicious code (such as COTS components, plugins, mobile code, worms, Trojans, and virus-infected code) using (i) CodeSurfer/x86's GUI, (ii) CodeSurfer/x86's scripting language, which provides access to all of the intermediate representations that CodeSurfer/x86 builds for the executable, and (iii) GrammaTech's Path Inspector, which is a tool that uses a sophisticated pattern-matching engine to answer questions about the flow of execution in a program.},
+booktitle = {Proceedings of the 14th International Conference on Compiler Construction},
+pages = {250–254},
+numpages = {5},
+location = {Edinburgh, UK},
+series = {CC'05}
+}
+@INPROCEEDINGS{Survey_of_Binary_Code_Security_Analysis,
+  author={Qingyang, Wu and Quanrui, Huo and Yuqiao, Ning and Chenya, Bian and Zhen, Guo and Shiwen, Shen},
+  booktitle={2023 6th International Conference on Data Science and Information Technology (DSIT)}, 
+  title={A Survey of Binary Code Security Analysis}, 
+  year={2023},
+  volume={},
+  number={},
+  pages={42-49},
+  keywords={Source coding;Instruments;Binary codes;Static analysis;Software;Performance analysis;Security;program security;binary analysis techniques;static binary analysis;dynamic binary analysis;hybrid dynamic and static analysis},
+  doi={10.1109/DSIT60026.2023.00015}
+}
+
+@inbook{QuickBCC,
+author = {Jang, Hajin and Yang, Kyeongseok and Lee, Geonwoo and Na, Yoonjong and Seideman, Jeremy and Luo, Shoufu and Lee, Heejo and Dietrich, Sven},
+year = {2021},
+month = {06},
+pages = {66-82},
+title = {QuickBCC: Quick and Scalable Binary Vulnerable Code Clone Detection},
+isbn = {978-3-030-78119-4},
+doi = {10.1007/978-3-030-78120-0_5}
+}
+
+@INPROCEEDINGS{VulneraBin,
+  author={Tai, Zeming and Washizaki, Hironori and Fukazawa, Yoshiaki and Fujimatsu, Yurie and Kanai, Jun},
+  booktitle={2020 IEEE 44th Annual Computers, Software, and Applications Conference (COMPSAC)}, 
+  title={Binary Similarity Analysis for Vulnerability Detection}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={1121-1122},
+  keywords={Measurement;Optimization;Computer science;Registers;Software;Static analysis;Binary codes;binary analysis;static analysis;binary code search;binary similarity},
+  doi={10.1109/COMPSAC48688.2020.0-110}}
+
+@inproceedings{Statistical_similarities_in_binaries,
+author = {David, Yaniv and Partush, Nimrod and Yahav, Eran},
+title = {Statistical similarity of binaries},
+year = {2016},
+isbn = {9781450342612},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2908080.2908126},
+doi = {10.1145/2908080.2908126},
+abstract = {We address the problem of finding similar procedures in stripped binaries. We present a new statistical approach for measuring the similarity between two procedures. Our notion of similarity allows us to find similar code even when it has been compiled using different compilers, or has been modified. The main idea is to use similarity by composition: decompose the code into smaller comparable fragments, define semantic similarity between fragments, and use statistical reasoning to lift fragment similarity into similarity between procedures. We have implemented our approach in a tool called Esh, and applied it to find various prominent vulnerabilities across compilers and versions, including Heartbleed, Shellshock and Venom. We show that Esh produces high accuracy results, with few to no false positives -- a crucial factor in the scenario of vulnerability search in stripped binaries.},
+booktitle = {Proceedings of the 37th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+pages = {266–280},
+numpages = {15},
+keywords = {partial equivalence, static binary analysis, statistical similarity, verification-aided similarity},
+location = {Santa Barbara, CA, USA},
+series = {PLDI '16}
+}

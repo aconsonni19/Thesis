@@ -71,38 +71,34 @@ saranno molto simili; potenzialmente portando l'analizzatore a segnalare dei fal
 \end{enumerate}
 Nonostante l'approccio proposto porti ad un miglioramento della complessità computazionale dell'analisi e alla mitigazione del numero di falsi positivi e negativi rilevati, l'affidabilità dell'analisi rimane comunque legata ad una soglia scelta manualmente dall'analista.
 Sarà quindi necessario che quest'ultimo imposti una soglia ottimale per ogni specifico binario o classe di vulnerabilità, compromettendo quindi l'automazione del processo.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Metodologie basate su tecniche di analisi dinamica}
-L'analisi dinamica consiste nell'osservare il comportamento di un determinato programma mentre esse viene eseguito in un determinato ambiente.
+L'analisi dinamica consiste nell'osservazione del comportamento di un programma mentre esse viene eseguito in un determinato ambiente d'esecuzione.
+Per consentire questo tipo di analisi, i tool che implementano questo tipo di tecniche devono effettuare un processo chiamato \textit{instrumentation}, il quale
+consiste nell'aggiungere codice di analisi all'interno del programma da analizzare in modo tale che venga eseguito insieme a quest'ultimo senza modificarne il normale
+flusso di esecuzione \cite{DBA_DBI}. I risultati ottenuti tramite l'analisi dinamica sono generalmente più precisi rispetto ai risultati ottenuti effettuando un'analisi statica
+del programma, poiché non vi è più la necessità di effettuare un'astrazione riguardo i valori computati o il cammino intrapreso dal programma sotto analisi.
+Tuttavia, poiché l'esecuzione concreta di un programma richiede la scelta di un insieme di input concreti con il quale eseguirlo, i risultati ottenuti tramite queste tecniche non sono
+generalizzabili, in quanto l'insieme di input scelto potrebbe non essere rappresentativo di tutti i possibili cammini d'esecuzione del programma \cite{Synergy_Duality}.
+\subsection{Fuzzing: }
+Il fuzzing è una tecnica di analisi che consiste nell'osservare il comportamento del programma quando esso
+riceve degli input casuali o malformati. Se a causa di questi input avviene un blocco dell'esecuzione oppure un crash, allora il programma
+potrebbe contenere una debolezza software oppure un problema di implementazione. Generalmente, i principali componenti del fuzzing sono  \cite{Fuzzing_soa}:
+\begin{itemize}
+    \item \textbf{Programma obbiettivo}: Il programma da analizzare, il quale può essere rappresentato sia dal suo codice binario sia dal suo codice sorgente. Poiché l'accesso a quest'ultimo è a volte ostico in situazioni reali, i software di fuzzing spesso
+    hanno come programma obbiettivo il solo codice binario.
+    \item \textbf{Monitor}: Raccoglie informazioni riguardanti l'esecuzione del programma.
+    \item \textbf{Input generator}: Si occupa della generazione degli input, la quale può avvenire in due modi distinti:
+    \begin{itemize}
+        \item \textbf{Grammar-based}: Gli input vengono generati utilizzando una grammatica 
+        \item \textbf{Mutation-based}: Gli input vengono generati usando dei file seed, i quali vengono mutati casualmente oppure utilizzando
+        delle strategie di mutazione ben definite.
+    \end{itemize}
+    \item \textbf{Bug detector}: Quando il programma va in crash o riporta degli errori, questo modulo recupera e analizza le informazioni rilevanti per determinare se vi è la presenza di un "bug" (una debolezza, una vulnerabilità, ...).
+    \item \textbf{Bug filter}: Non tutti i "bug" sono effettivamente delle vulnerabilità; è quindi necessaria un'operazione di filtraggio per scartare tutte quelle problematiche che non risultano sfruttabili da un attaccante.
+\end{itemize}
+
+
+
 
 
 

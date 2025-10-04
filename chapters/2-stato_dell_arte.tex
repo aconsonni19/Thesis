@@ -21,7 +21,7 @@ le principali difficoltà risiedono nella mancanza di informazioni riguardante i
 Nonostante queste sfide, nel corso degli anni sono stati sviluppati diversi approcci e metodologie di analisi statica progettati per effettuare la ricerca di vulnerabilità all'interno di file binari.
 Queste tecniche, tuttavia, possono produrre un elevato numero di falsi positivi e falsi negativi : poiché non effettuano un'esecuzione concreta del programma,
 esse devono effettuare diverse assunzioni sul suo stato a runtime. Ciò potrebbe quindi portare i tool basati su questa tipologia di analisi a segnalare vulnerabilità in porzioni di programma non vulnerabili.
-\subsection{Taint analysis statica: Bintaint}
+\subsection{Taint analysis statica}
 La \textit{taint analysis} (o \textit{taint checking}) è una tecnica di analisi che mira a tracciare e monitorare la propagazione di flussi di dati inaffidabili o 
 potenzialmente dannosi all'interno del programma. La taint analysis si compone di tre elementi chiave:
 \begin{enumerate}
@@ -50,7 +50,7 @@ L'approccio proposto dal tool permette di ridurre il numero di falsi positivi e 
 permette al tool di essere facilmente integrabile in sistemi di analisi più complessi, a patto che anch'essi utilizzino lo stesso linguaggio di rappresentazione intermedia. 
 Tuttavia il tool risulta comunque dipendente dall'input dell'analista; l'accuratezza dell'analisi dipenderà quindi dalla corretta definizione di sorgenti, sink e propagazione da parte
 di quest'ultimo. Infine, Bintaint si basa sul framework commerciale IDA, il quale non offre tutte le sue funzionalità nella sua versione gratuita.
-\subsection{Binary Code Similarity Detection: VulneraBin}
+\subsection{Binary Code Similarity Detection}
 Quando l'obbiettivo dell'analisi è ricercare una vulnerabilità nota (per esempio, una debolezza già documentata), è possibile adottare una strategia chiamata \textit{Binary Code Similarity Detection} (BCSD).
 Questo approccio si basa sul confronto il codice binario del programma in esame con la firma (il codice binario) della vulnerabilità.
 Se l'algoritmo di analisi rileva segmenti di codice con un elevato grado di somiglianza con la firma della vulnerabilità, allora è altamente probabile che il programma
@@ -80,14 +80,15 @@ del programma, poiché non vi è più la necessità di effettuare un'astrazione 
 Tuttavia, poiché l'esecuzione concreta di un programma richiede la scelta di un insieme di input concreti con il quale eseguirlo, i risultati ottenuti tramite queste tecniche non sono
 generalizzabili, in quanto l'insieme di input scelto potrebbe non essere rappresentativo di tutti i possibili cammini d'esecuzione del programma \cite{Synergy_Duality}.
 \subsection{Fuzzing}
-Il fuzzing è una tecnica di analisi che consiste nell'osservare il comportamento del programma quando esso
-riceve degli input casuali o malformati. Se a causa di questi input avviene un blocco dell'esecuzione oppure un crash, allora il programma
-potrebbe contenere una debolezza software oppure un problema di implementazione.
-Questa tecnica viene effettuata attraverso appositi programmi, detti \textit{fuzzers}, come per esempio \textbf{American Fuzzy Lop} (AFL) .
+Il fuzzing è una tecnica di analisi dinamica che consiste nell'osservare il comportamento del programma quando esso
+riceve degli input casuali o malformati. Se un input provoca un blocco dell'esecuzione o un crash, allora il programma
+potrebbe allora contenere una problematica di implementazione oppure una debolezza software, la quale, sotto certe circostanze, potrebbe
+risultare sfruttabile da un potenziale attaccante.
+Questa tecnica viene implementata attraverso programmi specializzati, chiamati \textit{fuzzers}; un esempio noto è \textbf{American Fuzzy Lop} (AFL).
 Generalmente, i principali componenti del fuzzing (e di un fuzzer) sono\cite{Fuzzing_soa}:
 \begin{itemize}
-    \item \textbf{Programma obbiettivo}: Il programma da analizzare, il quale può essere rappresentato sia dal suo codice binario sia dal suo codice sorgente. Poiché l'accesso a quest'ultimo è a volte ostico in situazioni reali, i software di fuzzing spesso
-    hanno come programma obbiettivo il solo codice binario.
+    \item \textbf{Programma obbiettivo}: Il programma da analizzare, il quale può essere rappresentato sia dal suo codice binario sia dal suo codice sorgente. Poiché l'accesso a quest'ultimo è a volte ostico in situazioni reali, i software di fuzzing hanno spesso
+    come programma obbiettivo il solo codice binario.
     \item \textbf{Monitor}: Raccoglie informazioni riguardanti l'esecuzione del programma.
     \item \textbf{Input generator}: Si occupa della generazione degli input, la quale può avvenire in due modi distinti:
     \begin{itemize}
@@ -104,13 +105,23 @@ Inoltre, le tecniche di fuzzing possono essere divise in tre categorie \cite{Fuz
     \item \textbf{Black-box fuzzing}: Nel fuzzing black-box si effettua il fuzzing sul programma senza avere nessuna informazione sulla sua struttura interna
     \item \textbf{Gray-box fuzzing}: Questo tipo di fuzzer effettuano un'analisi del programma (come taint analysis o tramite instrumentation) per ottenere le informazioni sulla struttura interna di quest'ultimo
 \end{itemize}
-L'analisi tramite fuzzing è facilmente implementabile, facilmente estensibile, scalabile e non richiede all'analista una conoscenza approfondita del programma sotto test. Tuttavia, la sua efficienza dipende da una serie di fattori, come per esempio
-la metodologia di generazione e mutazione dell'input: per effettuare una buona analisi di sicurezza del programma, è necessario che gli input generati siano in grado di passare i controlli di sanificazione che il programma effettua sull'input;  
-
-
 Seppur sia una tecnica efficiente e ben conosciuta per effettuare l'analisi di un programma, il fuzzing risente di diverse problematiche, come la necessità, nei fuzzer gray-box e black-box, di generare un input che passi i controlli di sanificazione del programma senza avere
 informazioni su quest'ultimo, permettendo così un'analisi più approfondita del programma. Altra problematica è quella legata alla definizione, nei fuzzer mutation-based, di una buona tecnica di mutazione dell'input, in modo da poter analizzare il maggior numero
-possibile di cammini di esecuzione interessanti. Diventa quindi necessario capire come \textbf{guidare la generazione dell'input}: 
+possibile di cammini di esecuzione interessanti. Per i tool di fuzzing, quindi, la problematica principale da superare è quella di \textbf{implementare una buona strategia di generazione e mutazione dell'input}, in modo tale che essa permetta all'analisi di essere il più approfondita possibile.
+\section{Tecniche basate su modelli di apprendimento automatico}
+Negli ultimi anni, la ricerca nell'ambito dell'intelligenza artificiale ha compiuto enormi progressi, portando i modelli disponibili ad essere
+sempre più accurati ed efficienti. Questo rapido avanzamento ha interessato anche l'ambito della sicurezza informatica: le capacità messe a disposizione
+dai modelli di intelligenza artificiale, in particolare dalle tecniche di machine learning, possono infatti essere sfruttate per la ricerca automatica di vulnerabilità.
+Le tecnica di machine learning possono dividere in base a come avviene l'addestramento del modello:
+\begin{itemize}
+    \item \textbf{Apprendimento supervisionato}: Si sviluppa un modello predittivo tramite l'addestramento su dati etichettati.
+    \item \textbf{Apprendimento non supervisionato}: Il modello viene applicato su un'insieme di dati non etichettati con lo scopo di trovare una qualche struttura intrinseca del dataset
+    \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obbiettivo, ricevendo una ricompensa o una penalità in base a quanto al scelta che ha compiuto lo avvicina all'obbiettivo
+\end{itemize}
+In generale, le tecniche di machine learning per la ricerca di vulnerabilità estraggono delle feature dal file binario sotto analisi; queste feature verranno poi codificate in un formato adatto per il modello e utilizzate per effettuare un riconoscimento
+di eventuali percorsi di esecuzione vulnerabili \cite{ML_Survey}. Sono state proposti diversi approcci basati su machine learning, per esempio \textit{Aumpansub} \& \textit{Huang} \cite{ML1} propongono di estrarre le informazioni sintattiche dal codice assembly e di addestrare
+due modelli per il riconoscimento, mentre 
+
 
 
 

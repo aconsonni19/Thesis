@@ -6,7 +6,7 @@
 \usepackage{listings}
 \usepackage{algpseudocode} % allows code snippets
 \usepackage{algorithm}
-\usepackage{hyperref} % allows
+\usepackage[hidelinks]{hyperref} % allows
 \usepackage{subcaption} 
 \usepackage[export]{adjustbox} 
 \usepackage{wrapfig} % allows warped figures
@@ -23,6 +23,10 @@ sorting=none,
 \usepackage{ragged2e}
 \usepackage{fancyhdr}
 \pagestyle{fancy} %oppure none
+\fancyhf{}
+\fancyhead[L]{\textit{Capitolo \thechapter}}
+\fancyfoot{}
+\fancyhead[R]{\textit{Pagina \thepage}}
 
 \graphicspath{ {./images/} }
 

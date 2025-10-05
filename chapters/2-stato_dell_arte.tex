@@ -110,20 +110,28 @@ informazioni su quest'ultimo, permettendo così un'analisi più approfondita del
 possibile di cammini di esecuzione interessanti. Per i tool di fuzzing, quindi, la problematica principale da superare è quella di \textbf{implementare una buona strategia di generazione e mutazione dell'input}, in modo tale che essa permetta all'analisi di essere il più approfondita possibile.
 \section{Tecniche basate su modelli di apprendimento automatico}
 Negli ultimi anni, la ricerca nell'ambito dell'intelligenza artificiale ha compiuto enormi progressi, portando i modelli disponibili ad essere
-sempre più accurati ed efficienti. Questo rapido avanzamento ha interessato anche l'ambito della sicurezza informatica: le capacità messe a disposizione
-dai modelli di intelligenza artificiale, in particolare dalle tecniche di machine learning, possono infatti essere sfruttate per la ricerca automatica di vulnerabilità.
-Le tecnica di machine learning possono dividere in base a come avviene l'addestramento del modello:
+sempre più accurati ed efficienti. Questo rapido avanzamento ha avuto un impatto significativo anche nel campo della sicurezza informatica, dove
+le capacità predittive dell'intelligenza artificiale possono essere sfruttate l'identificazione automatica di vulnerabilità.
+Le tecnica di apprendimento automatico possono dividere in base a come avviene l'addestramento del modello:
 \begin{itemize}
     \item \textbf{Apprendimento supervisionato}: Si sviluppa un modello predittivo tramite l'addestramento su dati etichettati.
     \item \textbf{Apprendimento non supervisionato}: Il modello viene applicato su un'insieme di dati non etichettati con lo scopo di trovare una qualche struttura intrinseca del dataset
     \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obbiettivo, ricevendo una ricompensa o una penalità in base a quanto al scelta che ha compiuto lo avvicina all'obbiettivo
 \end{itemize}
-In generale, le tecniche di machine learning per la ricerca di vulnerabilità estraggono delle feature dal file binario sotto analisi; queste feature verranno poi codificate in un formato adatto per il modello e utilizzate per effettuare un riconoscimento
-di eventuali percorsi di esecuzione vulnerabili \cite{ML_Survey}. Sono state proposti diversi approcci basati su machine learning, per esempio \textit{Aumpansub} \& \textit{Huang} \cite{ML1} propongono di estrarre le informazioni sintattiche dal codice assembly e di addestrare
-due modelli per il riconoscimento, mentre 
-
-
-
+In generale, le tecniche di machine learning per la ricerca di vulnerabilità prevedono l'estrazione di feature significativo dal file binario sotto analisi; le quali verranno poi codificate in un formato idoneo e utilizzate
+dal modello per l'identificazione di potenziali percorsi di esecuzione vulnerabili \cite{ML_Survey}.
+Sono state proposti diversi approcci basati su machine learning, per esempio \textit{Aumpansub} \& \textit{Huang} \cite{ML1} propongono di estrarre le informazioni sintattiche dal codice assembly e di addestrare
+due modelli per il riconoscimento, mentre \textit{Li et al.} \cite{DeepVL} propongono invece di usare come input di addestrare una rete neurale al riconoscimento di vulnerabilità tramite l'utilizzo di tracce di esecuzione del programma ottenute tramite fuzzing.
+La ricerca automatica di vulnerabilità in file binari tramite machine learning è un campo relativamente nuovo e, come tale, soffre di alcune problematiche \cite{ML2}:
+\begin{itemize}
+    \item \textbf{Mancanza della struttura ad alto livello del codice}: Come per l'analisi statica, la mancanza di informazioni sui tipi o sulle funzioni chiamate rende difficile l'applicazione di questo tipo di tecniche
+    \item \textbf{Selezione delle feature}: È necessario definire quali sono le feature rilevanti e sviluppare una metodologia per estrarle
+    \item \textbf{Selezione del modello}: Bisogna selezionare un modello che permetta di ottenere un grado accettabile di accuratezza. Questo compito è reso particolarmente difficile dal fatto che diversi modelli possono ottenere un'accuratezza comparabile a parità di analisi da effettuare.  
+\end{itemize}
+\section{Tecniche ibride}
+I vari approcci all'analisi di sicurezza presentati fino ad ora non devono essere pensati come insiemi disgiunti. Infatti, la combinazione di queste tecniche è una pratica estremamente diffusa e proficua, visto che permette
+di controbilanciare i punti deboli di ciascuna metodologia e di ottenere risultati più accurati. Per esempio, combinare tecniche di analisi statica e dinamica permette di mitigare il numero di falsi positivi ottenuti dalla prima
+effettuando un'esplorazione mirata tramite la seconda. Oppure le tecniche di analisi statica e dinamica possono essere usate per ottenere ed estrarre le feature necessarie all'addestramento del modello di riconoscimento (come abbiamo già visto con DeepVL \cite{DeepVL}).
 
 
 

@@ -22,6 +22,8 @@ sorting=none,
 ]{biblatex}
 \usepackage{ragged2e}
 \usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, patterns}
 \pagestyle{fancy} %oppure none
 \fancyhf{}
 \fancyhead[L]{\textit{Capitolo \thechapter}}
@@ -31,6 +33,10 @@ sorting=none,
 \graphicspath{ {./images/} }
 
 \addbibresource{./bibfile.bib}
+
+%\includeonly{chapters/1-Introduzione}
+
+
 
 \begin{document}
     \subfile{frontispiece.tex}
@@ -65,12 +71,25 @@ sorting=none,
     \addtocounter{page}{-2}
 
     \tableofcontents
+
     \thispagestyle{empty}
     \addtocounter{page}{-1}
+    
+    \listoffigures
+
+    \thispagestyle{empty}
+    \addtocounter{page}{-1}
+
+
+
     % Capitolo 1
     \subfile{chapters/1-Introduzione.tex}
     % Capitolo 2
     \subfile{chapters/2-stato_dell_arte.tex}
+    % Capitolo 3
+    \subfile{chapters/3-metodologia.tex}
+    % Capitolo 4
+
 
     \printbibliography[
         heading=bibintoc

@@ -69,6 +69,41 @@ saranno molto simili; potenzialmente portando l'analizzatore a segnalare dei fal
     \item \textbf{Similarity evaluation}: Viene effettuato un confronto fra gli hash MD5 calcolati sugli strand normalizzati e gli hash delle vulnerabilità contenute in un database. Se la similarità supera una certa soglia definita manualmente, allora
     il binario sarà considerato vulnerabile.
 \end{enumerate}
+\begin{figure}[h]
+    \centering % Questo comando centra il contenuto orizzontalmente
+    \scalebox{0.8}{ % Scaling a 80% per adattarsi alla larghezza della pagina
+        \begin{tikzpicture}[
+            % Stili dei nodi
+            % Riduzione della larghezza minima e della text width
+            block/.style={rectangle, draw, minimum height=1.2em, minimum width=5em, align=center, text width=5em, font=\small},
+            output/.style={font=\small}, 
+            % Stili delle frecce
+            line/.style={draw, -{Stealth}, thick}
+        ]
+
+            % 1. Nodi del diagramma
+            \node (query) [output] {Query};
+            % Riduzione della spaziatura tra i blocchi a 1cm
+            \node (lift) [block, right=0.5cm of query] {Lift \& re-optimize};
+            \node (slicing) [block, right=0.5cm of lift] {Slicing};
+            \node (normalize) [block, right=0.5cm of slicing] {Normalize};
+            % text width leggermente ridotta
+            \node (hash) [block, right=0.5cm of normalize, text width=6em] {Calculate hash value \& evaluate weight};
+            \node (search) [block, right=0.5cm of hash] {Search in database};
+            \node (output) [output, right=0.5cm of search] {Output};
+
+            % 2. Connessioni (frecce)
+            \path[line] (query) -- (lift);
+            \path[line] (lift) -- (slicing);
+            \path[line] (slicing) -- (normalize);
+            \path[line] (normalize) -- (hash);
+            \path[line] (hash) -- (search);
+            \path[line] (search) -- (output);
+
+        \end{tikzpicture}
+    }
+    \caption{Schema di funzionamento di VulneraBin. Immagine proveniente da \cite{VulneraBin}}
+\end{figure}
 Nonostante l'approccio proposto porti ad un miglioramento della complessità computazionale dell'analisi e alla mitigazione del numero di falsi positivi e negativi rilevati, l'affidabilità dell'analisi rimane comunque legata ad una soglia scelta manualmente dall'analista.
 Sarà quindi necessario che quest'ultimo imposti una soglia ottimale per ogni specifico binario o classe di vulnerabilità, compromettendo quindi l'automazione del processo.
 \section{Metodologie basate su tecniche di analisi dinamica}
@@ -105,6 +140,11 @@ Inoltre, le tecniche di fuzzing possono essere divise in tre categorie \cite{Fuz
     \item \textbf{Black-box fuzzing}: Nel fuzzing black-box si effettua il fuzzing sul programma senza avere nessuna informazione sulla sua struttura interna
     \item \textbf{Gray-box fuzzing}: Questo tipo di fuzzer effettuano un'analisi del programma (come taint analysis o tramite instrumentation) per ottenere le informazioni sulla struttura interna di quest'ultimo
 \end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.65\textwidth]{../images/Fuzzing.png}
+    \caption{Funzionamento generale di un fuzzer. Immagine proveniente da \cite{Fuzzing_soa}}
+\end{figure}
 Seppur sia una tecnica efficiente e ben conosciuta per effettuare l'analisi di un programma, il fuzzing risente di diverse problematiche, come la necessità, nei fuzzer gray-box e black-box, di generare un input che passi i controlli di sanificazione del programma senza avere
 informazioni su quest'ultimo, permettendo così un'analisi più approfondita del programma. Altra problematica è quella legata alla definizione, nei fuzzer mutation-based, di una buona tecnica di mutazione dell'input, in modo da poter analizzare il maggior numero
 possibile di cammini di esecuzione interessanti. Per i tool di fuzzing, quindi, la problematica principale da superare è quella di \textbf{implementare una buona strategia di generazione e mutazione dell'input}, in modo tale che essa permetta all'analisi di essere il più approfondita possibile.

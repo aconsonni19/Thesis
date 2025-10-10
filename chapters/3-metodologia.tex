@@ -3,13 +3,36 @@
 
 \begin{document}
 
-\chapter{Metodologia}
+\chapter{Metodologie utilizzate}
 \label{chap:oth}
+Questo capitolo è dedicato all'esposizione delle diverse metodologie statiche e dinamiche alla base delle tecniche di analisi rese disponibili dalla piattaforma.
+In particolare, verranno illustrati i concetti teorici alla loro base e verranno forniti esempi per illustrarne il funzionamento su casi concreti.
+\section{Disassembling}
+Generalmente, la catena di compilazione di un linguaggio ad alto livello prevede una fase di \textit{assemblaggio}, dove il codice assembly generato dal compilatore viene tradotto
+nel linguaggio macchina specifico dell'architettura della CPU su cui il programma dovrà essere eseguito. Questa traduzione stabilisce quindi una relazione uno-a-uno tra le istruzioni macchina
+prodotte dall'\textit{assemblatore} e le istruzioni assembly definita dalla \textit{Instruction Set Architecture} (ISA) dell'architettura del processore.
+Questa relazione permette di effettuare anche la traduzione inversa e recuperare il codice assembly dall'insieme di istruzioni macchina presenti in un file binario.
+Questo processo è noto con il nome di \textbf{disassembling}. Effettuare il disassembly di un programma è una pratica fondamentale nell'ambito del reverse engineering per la sicurezza, poiché
+permette di analizzare, in un formato leggibile da un essere umano (assembly), le operazioni che verranno svolte a basso livello dal calcolatore; rendendo possibile l'individuazione di eventuali problematiche
+di sicurezza potenzialmente sfruttabili da un attaccante. Seppur sembri un processo relativamente semplice, effettuare il disassembly di un codice macchina richiede di gestire diverse problematiche \cite{Disassembly2}:
+\begin{itemize}
+    \item \textbf{Rilocazione}: 
+    \item \textbf{Jump tables}: Una \textit{jump-table} è un array di indirizzi comunemente usata per per implementare trasferimenti del flusso di controllo multi-direzionali basati sul valore di un'espressione. Per esempio, l'implementazione a basso livello del costrutto switch del linguaggio \textit{C} prevede l'utilizzo di jump tables.
+    L'idea alla base dell'utilizzo di una jump table è quella di recuperare l'indirizzo a cui saltare indicizzando l'array con il valore dell'espressione per poi effettuare un jump indiretto verso l'indirizzo recuperato. Il codice che si occupa di questo processo di solito è preceduto da un controllo sul valore dell'espressione (\textit{bound check}) per assicurarsi che non si stia cercando di accedere ad un indice non presente nell'array.
+    Un disassembler dovrà quindi necessariamente stimare correttamente la grandezza della jump table per garantire la qualità del disassembly prodotto.
+\end{itemize}
 
 
-
-
-
+% TODO: Capire quale dei due tenere
+Vi sono diversi algoritmi per effettuare il disassembly di un codice macchina, per esempio\cite{Disassembly2}:
+\begin{itemize}
+    \item \textbf{Linear sweep}: Questo approccio decodifica direttamente tutte le istruzioni che appaiono nelle sezioni tipicamente dedicate per il codice macchina, trattandolo come uno stream di dati. Questo approccio risulta semplice da implementare e non richiede di effettuare un buffering delle istruzioni: lo stream
+    può essere decodificato istruzione per istruzione. Tuttavia, questo metodo ha lo svantaggio che ogni dato statico presente all'interno dello stream viene erroneamente considerato come un'istruzione. Inoltre, l'algoritmo non tiene in considerazione il flusso di controllo del programma: in alcune architetture come x86, se il programma assembly contiene dei NUL byte (i quali sono opcode validi in x86) per effettuare un allineamento prima
+    di un'istruzione di jump (jmp), essi verranno interpretati come codice eseguibile, nonostante essi non siano raggiungibili durante l'esecuzione del programma. 
+    \newpage
+    \item \textbf{Recursive traversal}: Un modo ovvio per risolvere le problematiche legate al flusso di controllo è quello di considerarlo durante il disassembly del programma: ogni volta che incontriamo un'istruzione di branch, computiamo gli indirizzi dove l'esecuzione può continuare e procediamo con il disassembly da quegli indirizzi. Questo tipo di approccio è chiamato \textit{recursive traversal}. Assumendo che siamo in grado di computare tutti i possibili indirizzi successori per ogni istruzione di branch e operazione di chiamata a funzione, questo approccio assicura che ogni
+    istruzione raggiungibile dall'entry point del programma sia correttamente disassemblata. Tuttavia, quest'assunzione non sempre vale: 
+\end{itemize}
 
 
 

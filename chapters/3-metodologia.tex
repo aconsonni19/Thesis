@@ -7,6 +7,63 @@
 \label{chap:oth}
 Questo capitolo è dedicato all'esposizione delle diverse metodologie statiche e dinamiche alla base delle tecniche di analisi rese disponibili dalla piattaforma.
 In particolare, verranno illustrati i concetti teorici alla loro base e verranno forniti esempi per illustrarne il funzionamento su casi concreti.
+\section{Control Flow Graph (CFG)}
+Considerare adeguatamente il flusso di controllo di un programma, cioè quali istruzioni vengono eseguite dato un certo input, è fondamentale per effettuare un'analisi di sicurezza accurata. Risulterebbe infatti inutile segnalare
+una problematica di sicurezza data da un segmento irraggiungibile del codice di un programma.
+Possiamo notare che quando vi sono due istruzioni in sequenza, l'esecuzione della prima implica l'esecuzione della seconda. 
+Chiamiamo quindi \textit{basic block} una \textbf{sequenza massimale contigua di statement del programma}.
+Per rappresentare in modo esaustivo tutti i possibili cammini di esecuzione che un programma può intraprendere, possiamo ricorrere ad una struttura a grafo chiamata \textbf{Control-Flow Graph} (CFG).
+Dato un programma $P$, un CFG per $P$ è un grafo $G$ \textbf{diretto e orientato} dove:
+\begin{itemize}
+    \item I nodi di $G$ sono i basic block del programma
+    \item Gli archi di $G$ connettono i basic block che sono in una relazione di sequenza (uno segue l'altro). Gli archi che derivano da una scelta condizionale (es. \textit{if}) sono etichettati con "true" e "false"
+\end{itemize}
+Durante la costruzione di un CFG, è importante gestire correttamente le istruzioni che modificano il flusso di controllo, come \textit{if} e \textit{while}:
+\begin{itemize}
+    \item \textbf{If}: Il controllo condizionale termina il basic block a cui appartiene lo statement immediatamente precedente. Due archi etichettati "true" e "false" connettono il basic block contenente la condizione rispettivamente ai rami \textit{then} e \textit{else}.
+    Gli archi uscenti dai basic block dei due rami sono diretti verso il basic block contenente gli statement che seguono l'intera struttura dell'istruzione condizionale.
+    \item \textbf{While}: Questo statement crea un \textbf{basic block a se stante}, il quale avrà due archi uscenti etichettati rispettivamente "true", verso il basic block del corpo del ciclo, e "false", verso il basic block degli statement successivi al ciclo.
+\end{itemize}
+\newpage \noindent
+Supponiamo, per esempio, di avere il seguente programma e di volerne costruire il CFG:
+\lstinputlisting[language=C, caption = Un programma in C che calcola il massimo numero in un array di cinque elementi, firstline = 3]{../code_examples/exemple1.c}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 1\linewidth]{../images/CFG.drawio.png}
+    \centering
+    \caption{CFG del programma illustrato nel listing 3.1}
+\end{figure}
+\section{Data Dependence Graph (DDG)}
+Quando si effettua l'analisi di un programma, oltre alla rappresentazione del flusso di controllo tramite CFG, risulta a volte utile tracciare le relazioni di dipendenza che sussistono tra le istruzioni del programma.
+Questo tipo di analisi permette infatti di individuare l'origine e l'utilizzo di variabili potenzialmente inquinate da dati malevoli. Per rappresentare queste relazioni possiamo usare una struttura a grafo che prende il nome
+di \textbf{Data-Dependence Graph} (DDG). Possiamo derivare un DGG direttamente dal CFG di un programma, tuttavia dobbiamo avere prima una definizione chiara di \textbf{dipendenza} fra gli statement; una possibile definizione è quella che prende il nome di \textbf{dipendenza per flusso} (flow-dependence) \cite{DDG}:
+Sia $G = (V, E)$ il CFG per un programma $P$ e siano $DEF(i)$ e $REF(i)$ gli insiemi che denotano rispettivamente le variabili definite e referenziate in un nodo $i \in V$ del CFG.
+Allora, un nodo $j \in V$ è \textbf{dipendente} dal nodo $i$ rispetto ad una certa variabile se e solo se esiste una variabile $x$ tale che:
+\begin{enumerate}
+    \item $x \in DEF(i)$
+    \item $x \in REF(j)$
+    \item Esiste un cammino da $i$ a $j$ senza definizioni intermedie della variabile $x$ (es. Altri assegnamenti ad $x$ ecc...)
+\end{enumerate} 
+Applicando quindi la definizione di dipendenza data, sussiste una relazione di dipendenza tra due statement $S1$ e $S2$ se:
+\begin{enumerate}
+    \item $S1$ definisce una variabile $x$
+    \item $S2$ contiene un riferimento ad $x$
+    \item Esiste un cammino da $S1$ a $S2$ dove $x$ non viene ridefinita. Ciò significa che la definizione di $x$ data in $S1$ viene utilizzata in $S2$.  
+\end{enumerate}
+Quindi, un DDG $D$ per un programma $P$ è un grafo \textbf{diretto e orientato} dove:
+\begin{itemize}
+    \item I nodi di $D$ rappresentano gli statement del programma
+    \item Gli archi di $D$ rappresentano le relazioni di dipendenza tra due statement
+\end{itemize}
+Supponiamo, per esempio, di avere il seguente programma e di volerne costruire il DDG:
+\lstinputlisting[language=C, caption = Un programma in C che calcola il prezzo di un prodotto. Esempio proventiente da \cite{DDG}, firstline = 2]{../code_examples/example2.c}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{../images/DDG.png}
+    \caption{Data Dependence Graph per il listing 3.2. Adattato da \cite{DDG}}
+\end{figure}
+\section{Program Slicing}
+
 \section{Disassembling}
 Generalmente, la catena di compilazione di un linguaggio ad alto livello prevede una fase di \textit{assemblaggio}, in cui il codice assembly generato dal compilatore viene tradotto
 nel linguaggio macchina specifico dell'architettura della CPU su cui il programma dovrà essere eseguito. Questa traduzione stabilisce quindi una relazione uno-a-uno tra le istruzioni macchina
@@ -30,31 +87,7 @@ Seppur sembri un processo relativamente semplice, effettuare il disassembly di u
     \end{itemize}
     Considerate insieme, queste caratteristiche rendono il disassembly di sequenze di PIC contenenti jump table più problematiche rispetto all'analisi di codice standard.
 \end{itemize}
-\section{Control Flow Graph (CFG)}
-Considerare adeguatamente il flusso di controllo di un programma, cioè quali istruzioni vengono eseguite dato un certo input, è fondamentale per effettuare un'analisi di sicurezza accurata. Risulterebbe infatti inutile segnalare
-una problematica di sicurezza data da un segmento irraggiungibile del codice di un programma. Vorremmo quindi un modo per rappresentare tutti i possibili cammini di esecuzione che un programma può intraprendere.
-Per farlo, possiamo possiamo basarci sulle seguenti definizioni: chiameremo \textit{basic block} una \textbf{sequenza massimale contigua di statement del programma}. Allora, un \textit{Control-Flow Graph (CFG)} per un programma $P$ è un grafo $G$ diretto e orientato dove:
-\begin{itemize}
-    \item I nodi di $G$ sono i basic block di $P$
-    \item Gli archi di $G$ connettono i basic block che sono in una relazione di sequenza (uno segue l'altro). Gli archi possono etichettati con "true" o "false" se il basic block sorgente termina con un controllo condizionale 
-\end{itemize}
-Durante la costruzione di un CFG, è importante gestire correttamente le istruzioni condizionali \textit{if} e \textit{while}:
-\begin{itemize}
-    \item \textbf{If}: Il controllo condizionale termina il basic block a cui appartiene lo statement precedente. Due archi etichettati rispettivamente con "true" e "false" connettono il basic
-    block in cui è contenuta l'istruzione \textit{if} ai basic block rispettivamente dei rami "then" e "else". La fine dei basic block dei rami "then" ed "else" hanno archi non etichettati
-    verso il basic block degli statement che seguono l’"if" statement
-    \item \textbf{While}: Questo tipo di statement crea un \textbf{basic block a se stante}, il quale avrà due archi uscenti etichettati rispettivamente "true", verso il
-    basic block del corpo del ciclo, e "false", verso il basic block degli statement dopo il ciclo
-\end{itemize}
-\newpage \noindent
-Supponiamo, per esempio, di avere il seguente programma:
-\lstinputlisting[language=C, caption = Un programma in C che calcola il massimo numero in un array di cinque elementi, firstline = 3]{../code_examples/exemple1.c}
-Allora, il suo CFG sarà: \newline
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 1\linewidth]{../images/CFG.drawio.png}
-    \caption{CFG del programma illustrato nel listing 3.1}
-\end{figure}
+
 
 
 

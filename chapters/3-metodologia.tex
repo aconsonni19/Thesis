@@ -6,7 +6,7 @@
 \chapter{Metodologie utilizzate}
 \label{chap:oth}
 Questo capitolo è dedicato all'esposizione delle diverse metodologie statiche e dinamiche alla base delle tecniche di analisi rese disponibili dalla piattaforma.
-In particolare, verranno illustrati i concetti teorici alla loro base e verranno forniti esempi per illustrarne il funzionamento su casi concreti.
+In particolare, verranno illustrati i concetti teorici alla loro base e verranno forniti esempi per illustrare il funzionamento di alcune tecniche su casi concreti.
 \section{Control Flow Graph (CFG)}
 Considerare adeguatamente il flusso di controllo di un programma, cioè quali istruzioni vengono eseguite dato un certo input, è fondamentale per effettuare un'analisi di sicurezza accurata. Risulterebbe infatti inutile segnalare
 una problematica di sicurezza data da un segmento irraggiungibile del codice di un programma.
@@ -62,7 +62,38 @@ Supponiamo, per esempio, di avere il seguente programma e di volerne costruire i
     \includegraphics[width = \linewidth]{../images/DDG.png}
     \caption{Data Dependence Graph per il listing 3.2. Adattato da \cite{DDG}}
 \end{figure}
-\section{Program Slicing}
+\section{Program slicing}
+La ricerca di vulnerabilità su programmi di grandi dimensioni può consumare una grande quantità di tempo e risorse. Inoltre, non tutte le computazioni
+effettuate da un programma sono potenzialmente vulnerabili. In questi casi, possiamo ridurre la dimensione delle spazio delle istruzioni da analizzare utilizzando
+una particolare tecnica di decomposizione chiamata \textbf{program slicing}. Questa tecnica produce un nuovo sottoprogramma, chiamato "slice", rilevante per una determinata computazione effettua dal programma principale.
+Il sottoprogramma prodotto da questa tecnica è comunque un programma eseguibile ed è prodotto a rispetto ad un \textbf{criterio di slicing}.
+Un criterio di slicing semplice utilizza due principali parametri \cite{Sclicing}:
+\begin{itemize}
+    \item \textbf{L'insieme delle variabili} rilevanti per la computazione di interesse
+    \item Le \textbf{locazioni d'interesse} nel programma
+\end{itemize} 
+Vi sono diverse tecniche per effettuare program slicing; alcuni esempi sono: \cite{Sclicing}:
+\begin{itemize}
+    \item \textbf{Program slicing statico (Backwards Slicing)}: Questa tecnica produce uno slice del programma senza tenere in considerazione l'input del programma. Fu la prima tecnica di slicing ad essere presentata \cite{weiser1981program}.
+    \item \textbf{Program slicing dinamico}: Questa tecnica, proposta da Korel and Laski \cite{korel1988dynamic}, si basa sulla computazione delle slide tenendo in considerazione l'input ricevuto dal programma, il suo percorso di esecuzione e le relazioni di dipendenza tra gli statement.
+    \item \textbf{Conditioned slicing}: Questo tipo di slicing forma un ponte tra slicing dinamico e statico. Il criterio di slicing condizionato usato da questa tecnica è una tripla $(p, V, n)$ dove $p$ è una qualche condizione iniziale di interesse, $V$ l'insieme delle variabili di interesse e $n$ l'insieme delle locazioni di interesse
+\end{itemize}
+\newpage
+Supponiamo di avere il seguente programma e di voler produrre uno slice, utilizzando la tecnica dello \textbf{slicing statico}, rispetto al criterio $(product, 13)$:
+\lstinputlisting[language=C, caption = Un programma in C che calcola il fattoriale di un numero $n$ e la somma da $1$ a $n$. Esempio proventiente da \cite{Sclicing}, firstline = 2]{../code_examples/example3.c}
+\lstinputlisting[
+  language=C,
+  caption={{Slice ottenuta applicando slicing statico rispetto al criterio $(product, 13)$}},
+  firstline=2
+]{../code_examples/slice.c}
+
+
+
+
+
+
+
+
 
 \section{Disassembling}
 Generalmente, la catena di compilazione di un linguaggio ad alto livello prevede una fase di \textit{assemblaggio}, in cui il codice assembly generato dal compilatore viene tradotto

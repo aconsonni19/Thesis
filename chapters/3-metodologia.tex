@@ -63,38 +63,31 @@ Supponiamo, per esempio, di avere il seguente programma e di volerne costruire i
     \caption{Data Dependence Graph per il listing 3.2. Adattato da \cite{DDG}}
 \end{figure}
 \section{Program slicing}
-La ricerca di vulnerabilità su programmi di grandi dimensioni può consumare una grande quantità di tempo e risorse. Inoltre, non tutte le computazioni
-effettuate da un programma sono potenzialmente vulnerabili. In questi casi, possiamo ridurre la dimensione delle spazio delle istruzioni da analizzare utilizzando
-una particolare tecnica di decomposizione chiamata \textbf{program slicing}. Questa tecnica produce un nuovo sottoprogramma, chiamato "slice", rilevante per una determinata computazione effettua dal programma principale.
-Il sottoprogramma prodotto da questa tecnica è comunque un programma eseguibile ed è prodotto a rispetto ad un \textbf{criterio di slicing}.
-Un criterio di slicing semplice utilizza due principali parametri \cite{Sclicing}:
+La ricerca di vulnerabilità in software di grandi dimensioni può consumare una grande quantità di tempo e risorse computazionali.
+Inoltre, non tutte le computazioni effettuate da un programma sono rilevanti o potenzialmente vulnerabili. 
+In questi casi, è possibile ridurre la dimensione dello spazio delle istruzioni da analizzare utilizzando una particolare tecnica di decomposizione
+chiamata \textbf{program slicing}.
+Questa tecnica produce un nuovo sottoprogramma, denominata \textit{slice}, che include solamente le istruzioni di interesse per una determinata computazione del programma.
+Lo slicing di un programma produce il più \textbf{piccolo sottoprogramma eseguibile} che mantiene il comportamento del programma originale rispetto a quella computazione ed è prodotto rispetto ad un \textbf{criterio di slicing}.
+Un criterio di slicing è una coppia $C = (V, n)$ dove \cite{Sclicing}:
 \begin{itemize}
-    \item \textbf{L'insieme delle variabili} rilevanti per la computazione di interesse
-    \item Le \textbf{locazioni d'interesse} nel programma
-\end{itemize} 
-Vi sono diverse tecniche per effettuare program slicing; alcuni esempi sono: \cite{Sclicing}:
-\begin{itemize}
-    \item \textbf{Program slicing statico (Backwards Slicing)}: Questa tecnica produce uno slice del programma senza tenere in considerazione l'input del programma. Fu la prima tecnica di slicing ad essere presentata \cite{weiser1981program}.
-    \item \textbf{Program slicing dinamico}: Questa tecnica, proposta da Korel and Laski \cite{korel1988dynamic}, si basa sulla computazione delle slide tenendo in considerazione l'input ricevuto dal programma, il suo percorso di esecuzione e le relazioni di dipendenza tra gli statement.
-    \item \textbf{Conditioned slicing}: Questo tipo di slicing forma un ponte tra slicing dinamico e statico. Il criterio di slicing condizionato usato da questa tecnica è una tripla $(p, V, n)$ dove $p$ è una qualche condizione iniziale di interesse, $V$ l'insieme delle variabili di interesse e $n$ l'insieme delle locazioni di interesse
+    \item $V$ è \textbf{l'insieme delle variabili} rilevanti per la computazione di interesse
+    \item $n$ è l'insieme dell \textbf{locazioni di interesse} nel programma 
 \end{itemize}
-\newpage
-Supponiamo di avere il seguente programma e di voler produrre uno slice, utilizzando la tecnica dello \textbf{slicing statico}, rispetto al criterio $(product, 13)$:
+Esistono diverse metodologie per effettuare lo slicing di un programma; alcuni esempi sono \cite{Sclicing}::
+\begin{itemize}
+    \item \textbf{Program slicing statico (Backwards slicing)} Questa tecnica produce uno slice del programma senza tenere in considerazione l'input del programma. Fu la prima tecnica di slicing ad essere presentata \cite{weiser1981program}.
+    \item \textbf{Program slicing dinamico}: Proposta da Korel e Laski \cite{korel1988dynamic}, questo tipo di slicing si basa sulla computazione dello slice tenendo in considerazione l'input ricevuto dal programma, il suo percorso di esecuzione e le relazioni di dipendenza tra gli statement.
+    \item \textbf{Conditioned slicing}: Questa tecnica funge da ponte tra slicing dinamico e statico. Nel conditioned slicing, una condizione di slicing è una tripla $C_{cond} = (p, V, n)$, dove $p$ è una qualche condizione iniziale di interesse.
+\end{itemize}
+\newpage \noindent
+Proponiamo il seguente esempio: supponiamo di avere il seguente programma e di voler produrre uno slice, utilizzando la tecnica dello \textbf{slicing statico}, rispetto al criterio $(product, 13)$:
 \lstinputlisting[language=C, caption = Un programma in C che calcola il fattoriale di un numero $n$ e la somma da $1$ a $n$. Esempio proventiente da \cite{Sclicing}, firstline = 2]{../code_examples/example3.c}
 \lstinputlisting[
   language=C,
   caption={{Slice ottenuta applicando slicing statico rispetto al criterio $(product, 13)$}},
   firstline=2
 ]{../code_examples/slice.c}
-
-
-
-
-
-
-
-
-
 \section{Disassembling}
 Generalmente, la catena di compilazione di un linguaggio ad alto livello prevede una fase di \textit{assemblaggio}, in cui il codice assembly generato dal compilatore viene tradotto
 nel linguaggio macchina specifico dell'architettura della CPU su cui il programma dovrà essere eseguito. Questa traduzione stabilisce quindi una relazione uno-a-uno tra le istruzioni macchina

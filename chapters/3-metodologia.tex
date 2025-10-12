@@ -88,6 +88,50 @@ Proponiamo il seguente esempio: supponiamo di avere il seguente programma e di v
   caption={{Slice ottenuta applicando slicing statico rispetto al criterio $(product, 13)$}},
   firstline=2
 ]{../code_examples/slice.c}
+\section{Esecuzione simbolica}
+Quando avviene la costruzione di un control flow graph per un programma, l'obbiettivo d'interesse è quello di rappresentare tutti i suoi possibili flussi di esecuzione.
+Tuttavia, ciò che non viene considerato durante la costruzione di un CFG è l'effettiva praticabilità dei suoi cammini; infatti alcuni cammini presenti sul CFG potrebbero
+essere \textbf{irraggiungibili} da un qualsiasi input dato al programma. Possiamo classificare i cammini su un CFG in due diverse categorie:
+\begin{itemize}
+    \item \textbf{Praticabili} (feasible): Se esiste un input concreto di valore $V$ tale che se il programma è eseguito con $V$, allora esso esegue tutte le istruzioni sul cammino considerato.
+    \item \textbf{Impraticabili} (infeasible): Se non esiste nessun input di valore $V$ che porta il programma ad eseguire il cammino considerato. La presenza di cammini non praticabili sul CFG \textbf{non implica necessariamente la presenza di codice morto}, tuttavia la presenza di quest'ultimo implica l'esistenza di cammini non praticabili.
+    Spesso, una grossa porzione di tutti i cammini di esecuzione di un programma sono impraticabili.
+\end{itemize}
+\textbf{L'esecuzione simbolica} funge da ponte tra il comportamento di un programma e la sua logica. 
+A differenza dell'esecuzione concreta di un programma, la quale utilizza un input concreto e permette di analizzare solamente un determinato cammino di esecuzione del programma,
+l'esecuzione simbolica permette di \textbf{esplorare simultaneamente tutti i cammini praticabili} che il programma potrebbe intraprendere al variare dell'input, eseguendo il programma con valori simbolici \cite{Symbolic_exc_1}.
+Un framework di esecuzione simbolica è tendenzialmente composto dalle seguenti componenti \cite{Symbolic_exc_1}:
+\begin{enumerate}
+    \item \textbf{Esecutore simbolico}: Esegue il programma utilizzando input simbolici. Per ogni cammino di esecuzione esplorato, mantiene le seguenti informazioni:
+    \begin{itemize}
+        \item \textbf{Path condition}: Una formula booleana nella logica del primo ordine che caratterizza lo stato d'esecuzione del programma. Essa esprime, sotto forma di vincoli logici, le condizioni soddisfatte dall'input durante l'esecuzione simbolica del programma.
+        Ogni istruzione di branch che viene eseguita dall'esecutore aggiorna la path condition per un determinato cammino con un nuovo vincolo. 
+        \item \textbf{Memoria simbolica}: Mappa le variabili a delle espressioni o valori simbolici. Le istruzioni di assegnamento del programma aggiornano la memoria simbolica dell'esecutore.
+    \end{itemize}
+    \item \textbf{Model checker}: Un model checker, tipicamente un \textit{Satisfiability modulo theories} (SMT) solver, viene utilizzato per controllare se vi sono delle violazioni logiche nella path condition rispetto ad una proprietà d'interesse (per esempio, una proprietà di sicurezza) e se il cammino è praticabile, cioè se la path condition che
+    lo caratterizza è una formula \textbf{soddisfacibile}. In generale, il problema della soddisfacibilità booleana (conosciuto con il nome di SAT) è un problema \textbf{indecidibile}; tuttavia, può essere risolto in un gran numero di casi pratici; per esempio, 
+    i vincoli booleani lineari (es. $X > Y \land X + Y \leq 10$) sono spesso risolubili in maniera efficiente.
+\end{enumerate}
+L'esecuzione simbolica di un programma può, inoltre, avvenire in due diversi modi:
+\begin{itemize}
+    \item \textbf{Esecuzione simbolica statica}: L'esecuzione avviene senza effettivamente eseguire il programma. Vengono esplorati tutti i possibili cammini praticabili del CFG.
+    \item \textbf{Esecuzione simbolica dinamica (analisi concolica)}: l'esecuzione simbolica del programma viene affiancata ad un'esecuzione; vengono quindi esplorati ed eseguiti simbolicamente solo i cammini raggiunti dal valore concreto dell'input.
+\end{itemize}
+Supponiamo, per esempio, di voler eseguire simbolicamente (in maniera statica) il seguente programma:
+\lstinputlisting[
+  language=C,
+  caption={{Un programma in C che controlla se l'utente ha scritto un numero tra cinque e sette}},
+  firstline=2
+]{../code_examples/example4.c}
+L'esecutore simbolico esplorerà tutti i cammini praticabili del programma:
+\begin{itemize}
+    \item \textbf{Variabili simboliche}: $x = X$ con $X$ valore simbolico
+    \item \textbf{Path condition}:
+    \begin{itemize}
+        \item \textbf{Percorso A}: $X >= 5 \land X <= 7$
+        \item \textbf{Percorso B}: $X < 5 \vee X > 7$
+    \end{itemize}
+\end{itemize}
 \section{Disassembling}
 Generalmente, la catena di compilazione di un linguaggio ad alto livello prevede una fase di \textit{assemblaggio}, in cui il codice assembly generato dal compilatore viene tradotto
 nel linguaggio macchina specifico dell'architettura della CPU su cui il programma dovrà essere eseguito. Questa traduzione stabilisce quindi una relazione uno-a-uno tra le istruzioni macchina
@@ -111,11 +155,6 @@ Seppur sembri un processo relativamente semplice, effettuare il disassembly di u
     \end{itemize}
     Considerate insieme, queste caratteristiche rendono il disassembly di sequenze di PIC contenenti jump table più problematiche rispetto all'analisi di codice standard.
 \end{itemize}
-
-
-
-
-
 \section{Decompiling}
 Dato un programma binario, è possibile \textbf{ricostruire il codice ad alto livello} in cui è stato scritto attraverso un processo noto come \textit{decompiling}.
 Lo scopo di un \textit{decompiler} (o \textit{reverse compiler}) è quindi quello di recuperare, partendo dal codice macchina, un programma scritto in un linguaggio ad alto livello che effettua le stesse

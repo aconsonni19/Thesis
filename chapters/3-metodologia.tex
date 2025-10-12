@@ -158,7 +158,51 @@ Seppur sembri un processo relativamente semplice, effettuare il disassembly di u
 \section{Decompiling}
 Dato un programma binario, è possibile \textbf{ricostruire il codice ad alto livello} in cui è stato scritto attraverso un processo noto come \textit{decompiling}.
 Lo scopo di un \textit{decompiler} (o \textit{reverse compiler}) è quindi quello di recuperare, partendo dal codice macchina, un programma scritto in un linguaggio ad alto livello che effettua le stesse
-operazioni del programma binario dato in input \cite{Cifuentes1995DecompilationOB}.
+operazioni del programma binario dato in input. Per effettuare il recupero del codice di un programma, un \textit{decompiler} deve gestire una molteplicità di problemi sia teorici che pratici, tra cui \cite{Cifuentes1994ReverseCT}:
+\begin{itemize}
+    \item \textbf{Problemi di rappresentazione}: Nell'architettura di Von Neumann, sia le istruzioni che i dati sono rappresentati nello stesso modo. Dato un byte in memoria, è impossibile determinare se esso rappresenta un'istruzione, un dato (o entrambi) fino a quando quel byte non verrà estratto dalla memoria, posto in un registro e utilizzato di conseguenza.
+    \item \textbf{Codice auto-modificante}: Il \textit{codice auto-modificante} (self-modifying code) si riferisce ad istruzioni o dati preimpostati in memoria che vengono modificati durante l'esecuzione del programma. Un byte in una posizione di memoria può essere modificato per rappresentare un'altra istruzione o un'altro dato. Questa tecnica era particolarmente rilevante duranti gli anni '60 e '70; quando
+    i limiti sulla grandezza della memoria dei calcolatori imponevano un utilizzo efficiente della stessa. Un modo per efficientarne l'uso era di modificare i byte caricati in una certa parte della memoria in modo tale che essi potessero essere riutilizzati come istruzioni o come dati a runtime. La presenza di codice auto-modificante rende più complesso effettuare il decompiling del programma, poiché il decompiler
+    dovrà tenere in considerazione la modifiche introdotte da questa tecnica per recuperare il codice ad alto livello corretto.
+    \item \textbf{Subroutine incluse da compilatori e linker}: Quando un programma viene compilato, il compilatore e il linker inseriscono una grande quantità di subroutine legate alle funzioni che queste due componenti svolgono.
+    In particolare, il compilatore includerà sempre delle routine di avvio che effettuano il setup dell'ambiente e, se richieste, delle subroutine di supporto al motore d'esecuzione. 
+    Queste routine sono di solito scritte in assembly e quindi risultano spesso \textbf{intraducibili} in un linguaggio ad alto livello. 
+    Ad esempio, un programma in C che stampa a schermo "hello world", quando compilato, conterrà nel suo file binario oltre 25 subroutine; 
+    mentre un programma in Pascal che effettua la stessa operazione ne conterrà addirittura più di 40.
+\end{itemize}
+\newpage \noindent
+Concettualmente, un \textit{decompiler} è strutturato in maniera simile ad un compilatore e prevede l'esecuzione di diverse fasi per effettuare la trasformazione da codice macchina a codice ad alto livello \cite{Cifuentes1994ReverseCT}. Queste fasi possono essere strutturare in tre moduli distinti \cite{Cifuentes1995DecompilationOB}:
+\begin{enumerate}
+    \item \textbf{Front-end}:
+    \begin{itemize}
+        \item Prende in input il file binario per una specifica architettura e scritto in uno specifico linguaggio, lo carica in uno spazio di memoria virtuale
+        \item Effettua il parsing delle istruzioni presenti nel programma
+        \item Produce sia una rappresentazione del programma in un linguaggio intermedio a basso livello sia il Control Flow Graph del programma.
+    \end{itemize}
+    \item \textbf{Universal decompiling machine (UDM)}:
+    \begin{itemize}
+        \item È un modulo intermedio \textbf{completamente indipendente} dall'architettura del processore e dal linguaggio di programmazione utilizzato per scrivere il programma
+        \item Effettua due tipi di analisi, rispettivamente \textit{data flow analysis} e \textit{control flow analysis}, per raffinare la rappresentazione intermedia a basso livello in una rappresentazione intermedia più ad alto livello. 
+        \item Inoltre, il modulo si occupa di ristrutturare il CFG prodotto dal primo modulo in un insieme di \textbf{costrutti} generalmente presenti in un linguaggio ad alto livello.
+    \end{itemize}
+    \item \textbf{Back-end}:
+    \begin{itemize}
+        \item Questo modulo si occupa della generazione effettiva del codice decompilato. Questo modulo è quindi \textbf{dipendente dal linguaggio di programmazione in cui si vuole avere il risultato finale}
+        \item Effettua, opzionalmente, un'ulteriore ristrutturazione del CFG, in modo tale che i costrutti specifici presenti nel linguaggio obbiettivo ma non presenti nel generico insieme di costrutti generato durante la fase precedente vengano utilizzati.
+        \item Infine, il modulo genera il codice ad alto livello (codice decompilato)
+    \end{itemize}
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.90\linewidth]{../images/Decompilation.png}
+    \caption{Flusso completo del processo di decompilazione. Immagine proventiente da \cite{Cifuentes1995DecompilationOB}}
+\end{figure}
+
+
+
+
+
+
 
 
 

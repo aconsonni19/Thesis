@@ -1,11 +1,19 @@
 \documentclass[../main.tex]{subfiles}
 \addbibresource{../bibfile.bib}
+
+
+% Tecnologie da spiegare
+% - angr
+% - Flask (Cenni)
+% - SvelteKit (Cenni)
+
 \begin{document}
 
 \chapter{Tecnologie utilizzate}
 \label{chap:conclusion}
 Questo capitolo è dedicato ad un'analisi dettagliata delle principali tecnologie adottate per lo sviluppo della piattaforma Binoculars.
-Verrà approfondito il funzionamento e la struttura interna sia per ogni tecnologia di analisi impiegata sia di ogni framework utilizzato per l'implementazione del frontend e del backend della piattaforma. 
+Verrà approfondito il funzionamento e la struttura interna per ogni tecnologia di analisi impiegata e quali funzionalità essa offre nell'ambito dell'analisi di
+file binari.
 \section{Capstone}
 \textit{Capstone} \cite{Capstone_docs} è una framework leggero e multi-piattaforma per effettuare il disassembly di codice macchina.
 Si basa sulla famiglia di framework per compilatori \textit{LLVM}, in particolare sul modulo \textit{LLVM-Machine Code} (LLVM-MC), il quale contiene un disassemblatore interno con supporto
@@ -85,4 +93,7 @@ La piattaforma è suddivisa nei seguenti sotto-moduli \cite{angr_introductory_pa
     \includegraphics[width = 0.95\textwidth]{../images/angr_diagram.png}
     \caption{Architettura completa della piattaforma angr}
 \end{figure}
+
+
+
 \end{document}

@@ -121,7 +121,13 @@ sorting=none,
     \subfile{chapters/4-tecnologie.tex}
 
 
-    \printbibliography[
-        heading=bibintoc
-    ]
+    \clearpage
+    \fancypagestyle{bibliopage}{
+        \fancyhf{}
+        \fancyhead[R]{\textit{Pagina \thepage}}
+        \fancyhead[L]{\textit{Bibliografia}} % oppure lascia vuoto se preferisci
+    }
+
+    \pagestyle{bibliopage}
+    \printbibliography[heading=bibintoc]
 \end{document}

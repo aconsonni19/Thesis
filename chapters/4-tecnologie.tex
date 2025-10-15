@@ -1,14 +1,6 @@
 \documentclass[../main.tex]{subfiles}
 \addbibresource{../bibfile.bib}
-
-
-% Tecnologie da spiegare
-% - angr
-% - Flask (Cenni)
-% - SvelteKit (Cenni)
-
 \begin{document}
-
 \chapter{Tecnologie utilizzate}
 \label{chap:conclusion}
 Questo capitolo è dedicato ad un'analisi dettagliata delle principali tecnologie adottate per lo sviluppo della piattaforma Binoculars.
@@ -79,21 +71,24 @@ Essa offre un supporto multi-architettura per l'esecuzione di un'ampia gamma di 
     \item \textbf{Automatic Exploit Generation (AEG)}: angr mette a disposizione dei moduli per effettuare la generazione automatica di exploit, i quali permettono ad un'analista di confermare se la vulnerabilità rilevata può essere effettivamente sfruttata da un potenziale attaccante.
 \end{itemize}
 \newpage \noindent
-La piattaforma è suddivisa nei seguenti sotto-moduli \cite{angr_introductory_paper}:
+La piattaforma è suddivisa nei seguenti sotto-moduli \cite{angr_introductory_paper}\cite{ang_image}:
 \begin{itemize}
     \item \textbf{Intermediate Representation}: Per permettere il supporto per molteplici architetture, il codice macchina del programma analizzato viene tradotto nel linguaggio di rappresentazione intermedia \textit{VEX}, sviluppato per il progetto \textit{Valgrind} e specificatamente studiato per l'analisi binaria.
     \item \textbf{CLE}: Il compito di caricare il file binario viene gestito dal modulo \textit{CLE}, acronimo ricorsivo per \textit{CLE Loads Everything}. CLE astrae il processo di caricamento per una numerosa quantità di formati di file eseguibili, gestendo la risoluzione dinamica dei simboli, la rilocazione della memoria
     e la corretta inizializzazione dello stato del programma
     \item \textbf{SimuVEX}: Il modulo \textit{SimuVEX} si occupa di effettuare la rappresentazione dello stato del programma (valori dei registri, file aperti, ...). Il modulo, inoltre, permette di rappresentare i cambiamenti semantici sullo stato del programma dati dall'esecuzione di un particolare blocco di codice. In particolare, SimuVEX permette
-    di processare uno \textit{stato di input}, attraverso un blocco di codice VEX, e di generare uno \textit{stato di output} (o un'insieme di stati di output, in caso il blocco di codice contenga un'istruzione condizionale). I valori presenti nei registri sono rappresentati tramite le astrazioni messe a disposizione dalla libreria \textit{claripy}.
-    \item \textbf{Full program analysis}: Questo modulo si occupa di gestire e implementare le tecniche di analisi messe a disposizione dalla piattaforma.
+    di processare uno \textit{stato di input}, attraverso un blocco di codice VEX, e di generare uno \textit{stato di output} (o un'insieme di stati di output, in caso il blocco di codice contenga un'istruzione condizionale). 
+    \item \textbf{Data Model}: I valori presenti nei registri sono rappresentati tramite le astrazioni messe a disposizione dalla libreria \textit{Claripy}. 
+    La libreria astrae ogni valore in una rappresentazione simbolica chiamata \textit{espressione}, la quale traccia tutte le operazioni in cui essa viene utilizzata.
+    Le espressioni vengono rappresentate mediante strutture ad albero chiamate \textit{expression trees}, nelle quali i nodi intermedi contengono l'operazione svolta, mentre le foglie contengono i valori usati come argomenti dell'operazione.
+    Per esempio, se all'espressione $x$ viene aggiunta l'espressione $5$, la nuova espressione risultante sarà $x+5$. Il suo \textit{expression tree}, quindi, avrà l'operazione di somma alla radice, mentre le foglie conterranno le espressioni $x$ e $5$.
+    \item \textbf{Full program analysis}: Questo modulo mette a disposizione dell'analista un entry point (la classe \textit{Project}) per accedere sia alle funzionalità dei moduli descritti sopra sia alle tecniche di analisi binaria messe a disposizione dalla piattaforma.
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.95\textwidth]{../images/angr_diagram.png}
-    \caption{Architettura completa della piattaforma angr}
+    \includegraphics[width = 0.40\textwidth]{../images/angr_architecture.png}
+    \caption{Architettura di angr. Immagine proveniente da \cite{angr_architecture}}
+
 \end{figure}
-
-
 
 \end{document}

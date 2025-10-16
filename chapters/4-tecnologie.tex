@@ -71,7 +71,7 @@ Essa offre un supporto multi-architettura per l'esecuzione di un'ampia gamma di 
     \item \textbf{Automatic Exploit Generation (AEG)}: angr mette a disposizione dei moduli per effettuare la generazione automatica di exploit, i quali permettono ad un'analista di confermare se la vulnerabilità rilevata può essere effettivamente sfruttata da un potenziale attaccante.
 \end{itemize}
 \newpage \noindent
-La piattaforma è suddivisa nei seguenti sotto-moduli \cite{angr_introductory_paper}\cite{ang_image}:
+La piattaforma è suddivisa nei seguenti sotto-moduli \cite{angr_introductory_paper}:
 \begin{itemize}
     \item \textbf{Intermediate Representation}: Per permettere il supporto per molteplici architetture, il codice macchina del programma analizzato viene tradotto nel linguaggio di rappresentazione intermedia \textit{VEX}, sviluppato per il progetto \textit{Valgrind} e specificatamente studiato per l'analisi binaria.
     \item \textbf{CLE}: Il compito di caricare il file binario viene gestito dal modulo \textit{CLE}, acronimo ricorsivo per \textit{CLE Loads Everything}. CLE astrae il processo di caricamento per una numerosa quantità di formati di file eseguibili, gestendo la risoluzione dinamica dei simboli, la rilocazione della memoria
@@ -88,7 +88,5 @@ La piattaforma è suddivisa nei seguenti sotto-moduli \cite{angr_introductory_pa
     \centering
     \includegraphics[width = 0.40\textwidth]{../images/angr_architecture.png}
     \caption{Architettura di angr. Immagine proveniente da \cite{angr_architecture}}
-
 \end{figure}
-
 \end{document}

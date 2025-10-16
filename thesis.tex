@@ -23,6 +23,11 @@ sorting=none,
 \usepackage{ragged2e}
 \usepackage{fancyhdr}
 \usepackage{tikz}
+\usepackage[normalem]{ulem}
+\usepackage{array}
+\usepackage{tabularx}
+
+\useunder{\uline}{\ul}{}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, patterns}
 \usetikzlibrary{calc}
 \pagestyle{fancy} %oppure none
@@ -105,6 +110,8 @@ sorting=none,
     \listoffigures
 
     \lstlistoflistings
+
+    \listoftables
 
     \thispagestyle{empty}
     \addtocounter{page}{-2}

@@ -50,6 +50,73 @@ VulnDetect struttura la strategia di analisi in due fasi distinte:
     \caption{Processo di analisi impiegato da VulnDetect. Immagine proveniente da \cite{VulnDetect}}
 \end{figure}
 \section{Arbiter}
+Oltre alle problematiche già discusse nel \textit{capitolo 2}, le tecniche di analisi dinamica soffrono anche di un significativo problema di \textit{scalabilità}. 
+In particolare, l'esecuzione simbolica dinamica presenta una pessima scalabilità quando applicata su file binari di grandi dimensioni. 
+A questo si aggiunge il problema, presente in tutte le tecniche di analisi dinamica, della bassa copertura in termini di codice analizzato.
+Per essere utile all'analista, una tecnica di ricerca automatica delle vulnerabilità deve soddisfare due requisiti cruciali: la \textbf{generalità}, ossia la capacità di poter essere impiegata
+su un ampio spettro di programmi, e \textbf{l'accuratezza}, la quale richiede di introdurre un numero di falsi positivi quanto più minimale possibile.
+Le tecniche di \textbf{analisi ibrida} si configurano quindi come una scelta particolarmente adatta a questo scopo, in quanto combinano i punti di forza sia di analisi dinamica e statica, permettendo così di mitigarne
+le problematiche. \textbf{Arbiter} \cite{Arbier} è una tecnica ibrida di ricerca automatica di vulnerabilità, progettata per individuare la presenza di diverse classi di vulnerabilità attraverso una combinazione di analisi statiche e dinamiche.
+La metodologia di analisi proposta da \textit{Arbiter} permette di mitigare il numero di falsi positivi introdotti dalle tecniche di analisi statica, mantenendo al contempo una buona scalabilità al crescere delle dimensioni del programma analizzato.
+L'implementazione delle tecniche di analisi usate da \textit{Arbiter} sfrutta le funzionalità messe a disposizione dal framework di analisi \textit{angr}.
+\newpage
+\subsection{Property-Compliant Vulnerabilities}
+Arbiter è capace di rilevare tutte quelle vulnerabilità che rispettano la seguente serie di proprietà \cite{Arbier}:
+\begin{itemize}
+    \item \textbf{(P1): Sensibilità al flusso dei dati}: Le vulnerabilità che sono sensibili al flusso dei dati nel programma (\textit{data-flow sensitive}) possono essere rilevate effettuando
+    un ragionamento riguardante il flusso dei dati dalle sorgenti di input ai sink vulnerabili. È necessario notare che il numero di questo tipo di vulnerabilità è strettamente maggiore rispetto al numero di vulnerabilità
+    rilevabili effettuando solamente una \textit{taint-analysis}; quest'ultime, infatti, includono solamente quelle vulnerabilità causate da una \textbf{mancata sanificazione} dell'input dell'utente.
+    \item \textbf{(P2): Sorgenti e sink facilmente identificabili}: Le sorgenti di input e i loro sink devono essere facilmente identificabili, cioè possono essere identificati tramite l'analisi di artefatti che è possibile
+    produrre in maniera computazionalmente efficiente, come per esempio, un CFG.
+    \item \textbf{(P3): Aliasing determinato dal flusso di esecuzione}: Le informazioni riguardanti l'accesso alla stessa area di memoria attraverso \textit{aliasing} devono essere recuperabili semplicemente analizzando il flusso d'esecuzione del programma.
+    Questa proprietà risulta vera solamente quando il programma non effettua nessuna \textbf{deferenziazione di puntatori} oppure quando la deferenziazione può essere \textbf{risolta ad un singolo oggetto} determinato interamente dal flusso di esecuzione del programma.
+\end{itemize}
+Chiameremo una vulnerabilità \textit{property-compliant} (PC) quando essa rispetta tutte e tre le proprietà descritte sopra. Tuttavia, è necessario notare che la condizioni sulla deferenziazione dei puntatori descritte nella proprietà \textit{P3} portano
+l'analisi a barattare ad una perdita di generalità in cambio di un aumento dell'efficienza.
+\subsection{Vulnerability descriptions} 
+Per effettuare l'analisi per ogni classe di vulnerabilità \textit{property-compliant}, \textit{Arbiter} utilizza una descrizione, specifica per ogni vulnerabilità, delle proprietà descritte sopra chiamata \textit{Vulnerability description} (VD).
+Una VD è una \textbf{rappresentazione programmatica in linguaggio python} dei vari artefatti statici e simbolici inerenti ad ogni proprietà che una vulnerabilità property-compliant deve rispettare.
+Una VD contiene le seguenti funzioni:
+\begin{itemize}
+    \item \textbf{specify\_sources(binary)}: Questa funzione deve ritornare un dizionario contenete tutte le sorgenti di input (funzioni) potenzialmente vulnerabili del programma. Ad ogni chiave del dizionario può
+    essere associato il valore numerico $0$, il quale indicherà ad \textit{Arbiter} di tracciare il flusso di dati generato dal valore di ritorno della funzione, oppure un valore numerico $i > 0$, il quale indicherà ad \textit{Arbiter} di
+    tracciare il flusso di dati generato dal parametro $i$-esimo della funzione.
+    \item \textbf{specify\_sinks(binary)}: Similmente a \textit{specify\_sources}, questa funzione deve ritornare un dizionario contenete tutti i potenziali sink (funzioni) di flussi di dati vulnerabili. Ad ogni funzione nel dizionario è associata una lista di caratteri così strutturata:
+    \begin{itemize}
+        \item Se la cella $j$-esima contiene il carattere $n$, allora \textit{Arbiter} considererà i flussi di dati che arrivano ad essere utilizzati come parametro $j$-esimo della funzione.
+        \item Se la cella $j$-esima contiene il carattere $c$, allora \textit{Arbiter} ignorerà i flussi di dati che arrivano ad essere utilizzati come parametro $j$-esimo della funzione
+    \end{itemize}
+    \item \textbf{apply\_constraints(state, sources, sink)}: Questa funzione specifica, utilizzando le funzionalità di \textit{claripy} tramite \textit{angr}, quali sono le condizioni che il flusso di dati da sorgente a sink deve rispettare
+    per essere considerato vulnerabile.
+\end{itemize}
+Le VD attualmente presenti in arbiter coprono le seguenti classi di vulnerabilità:
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{|l|X|X|X|}
+\hline
+CWE     & Descrizione                                        & Sorgente                        & Sink                                                                                                   \\ \hline
+CWE-131 & Incorrect calculation of buffer size               & Qualsiasi operazione aritmetica & 1° argomento di malloc()                                                                               \\ \hline
+CWE-134 & Controlled format string                           & Qualsiasi dato in input         & Tutte le funzioni della famiglia di printf()                                                           \\ \hline
+CWE-252 & Unchecked return value                             & Valore di ritorno di setuid()   & Qualsiasi operazione che usa il dato generato dalla sorgente                                           \\ \hline
+CWE-337 & Predictable seed in pseudo-random number generator & Valore di ritorno di time()     & 1° argomento di srand()                                                                                \\ \hline
+\end{tabularx}
+\caption{Vulnerability description attualmente disponibili in Arbiter}
+\end{table}
+\noindent
+Inoltre, è possibile creare delle VD per le seguenti classi di vulnerabilità:
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{|l|X|X|X|}
+\hline
+CWE     & Descrizione                                        & Sorgente                        & Sink                                                                                                   \\ \hline
+CWE-78 & OS Command injection& 1° argomento di sprintf() & 1° argomento di system()                                                                               \\ \hline
+CWE-190 & Integer overflow or Wraparound                           & Operazione aritmetica sul valore di ritorno di sizeof()         & Qualsiasi parametro di funzione di tipo size\_t                                                           \\ \hline
+CWE-676 & Use of potentially dangerous function                             & Qualsiasi funzione   & 1° argomento di strcopy()                              \\ \hline
+CWE-120 & Classic buffer overflow     & 2° argomento di read() & 1° argomento di memcpy()                                                                                \\ \hline
+\end{tabularx}
+\caption{Classi di vulnerabilità per le quali è possibile scrivere una VD}
+\end{table}
+\subsection{Strategia di analisi}
 
 
 

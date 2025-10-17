@@ -26,7 +26,7 @@ al programmatore. Quando il buffer-overflow può avvenire su un buffer allocato 
 La presenza di questo tipo di vulnerabilità può portare a conseguenze catastrofiche: un attaccante, per esempio, potrebbe sovrascrivere l'indirizzo di ritorno della funzione in cui viene dichiarato il buffer, 
 potenzialmente portando il programma ad eseguire codice malevolo presente nell'input (shellcode).
 \subsection{Strategia di analisi}
-VulnDetect struttura la strategia di analisi in due fasi distinte:
+VulnDetect struttura la strategia di analisi in due fasi distinte \cite{VulnDetect}:
 \begin{enumerate}
     \item \textbf{Analisi statica}: Le vulnerabilità di tipo \textit{buffer overflow} sono principalmente causate dall'utilizzo improprio di funzioni pericolose (in C, per esempio \textit{gets, scanf,}...) e dalla mancanza di controlli
     sulla lunghezza dell'input dell'utente. Per migliorare l'efficienza dell'esecuzione simbolica, VulnDetect applica una sequenza di tecniche di analisi statica sul programma:
@@ -66,7 +66,7 @@ Arbiter è capace di rilevare tutte quelle vulnerabilità che rispettano la segu
     \item \textbf{(P1): Sensibilità al flusso dei dati}: Le vulnerabilità che sono sensibili al flusso dei dati nel programma (\textit{data-flow sensitive}) possono essere rilevate effettuando
     un ragionamento riguardante il flusso dei dati dalle sorgenti di input ai sink vulnerabili. È necessario notare che il numero di questo tipo di vulnerabilità è strettamente maggiore rispetto al numero di vulnerabilità
     rilevabili effettuando solamente una \textit{taint-analysis}; quest'ultime, infatti, includono solamente quelle vulnerabilità causate da una \textbf{mancata sanificazione} dell'input dell'utente.
-    \item \textbf{(P2): Sorgenti e sink facilmente identificabili}: Le sorgenti di input e i loro sink devono essere facilmente identificabili, cioè possono essere identificati tramite l'analisi di artefatti che è possibile
+    \item \textbf{(P2): Sorgenti e sink facilmente identificabili}: Le sorgenti di input e i loro sink devono essere facilmente identificabili, cioè devono poter essere identificati tramite l'analisi di artefatti che è possibile
     produrre in maniera computazionalmente efficiente, come per esempio, un CFG.
     \item \textbf{(P3): Aliasing determinato dal flusso di esecuzione}: Le informazioni riguardanti l'accesso alla stessa area di memoria attraverso \textit{aliasing} devono essere recuperabili semplicemente analizzando il flusso d'esecuzione del programma.
     Questa proprietà risulta vera solamente quando il programma non effettua nessuna \textbf{deferenziazione di puntatori} oppure quando la deferenziazione può essere \textbf{risolta ad un singolo oggetto} determinato interamente dal flusso di esecuzione del programma.
@@ -78,10 +78,10 @@ Per effettuare l'analisi per ogni classe di vulnerabilità \textit{property-comp
 Una VD è una \textbf{rappresentazione programmatica in linguaggio python} dei vari artefatti statici e simbolici inerenti ad ogni proprietà che una vulnerabilità property-compliant deve rispettare.
 Una VD contiene le seguenti funzioni:
 \begin{itemize}
-    \item \textbf{specify\_sources(binary)}: Questa funzione deve ritornare un dizionario contenete tutte le sorgenti di input (funzioni) potenzialmente vulnerabili del programma. Ad ogni chiave del dizionario può
+    \item \textbf{specify\_sources(binary)}: Questa funzione deve ritornare un dizionario contenete tutte le sorgenti di input (funzioni) potenzialmente malevole  del programma. Ad ogni chiave del dizionario può
     essere associato il valore numerico $0$, il quale indicherà ad \textit{Arbiter} di tracciare il flusso di dati generato dal valore di ritorno della funzione, oppure un valore numerico $i > 0$, il quale indicherà ad \textit{Arbiter} di
     tracciare il flusso di dati generato dal parametro $i$-esimo della funzione.
-    \item \textbf{specify\_sinks(binary)}: Similmente a \textit{specify\_sources}, questa funzione deve ritornare un dizionario contenete tutti i potenziali sink (funzioni) di flussi di dati vulnerabili. Ad ogni funzione nel dizionario è associata una lista di caratteri così strutturata:
+    \item \textbf{specify\_sinks(binary)}: Similmente a \textit{specify\_sources}, questa funzione deve ritornare un dizionario contenete tutti i potenziali sink (funzioni) dei flussi di dati vulnerabili. Ad ogni funzione nel dizionario è associata una lista di caratteri così strutturata:
     \begin{itemize}
         \item Se la cella $j$-esima contiene il carattere $n$, allora \textit{Arbiter} considererà i flussi di dati che arrivano ad essere utilizzati come parametro $j$-esimo della funzione.
         \item Se la cella $j$-esima contiene il carattere $c$, allora \textit{Arbiter} ignorerà i flussi di dati che arrivano ad essere utilizzati come parametro $j$-esimo della funzione
@@ -89,7 +89,7 @@ Una VD contiene le seguenti funzioni:
     \item \textbf{apply\_constraints(state, sources, sink)}: Questa funzione specifica, utilizzando le funzionalità di \textit{claripy} tramite \textit{angr}, quali sono le condizioni che il flusso di dati da sorgente a sink deve rispettare
     per essere considerato vulnerabile.
 \end{itemize}
-Le VD attualmente presenti in arbiter coprono le seguenti classi di vulnerabilità:
+Le VD attualmente presenti in \textit{Arbiter} coprono le seguenti classi di vulnerabilità:
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|X|X|}
@@ -117,17 +117,33 @@ CWE-120 & Classic buffer overflow     & 2° argomento di read() & 1° argomento 
 \caption{Classi di vulnerabilità per le quali è possibile scrivere una VD}
 \end{table}
 \subsection{Strategia di analisi}
-
-
-
-
-
-
-
-
+Supponiamo di voler analizzare il programma $P$ per controllare se esso presenta una certa vulnerabilità $V$.
+Allora, \textit{Arbiter} struttura la strategia di analisi per $V$ nelle seguenti fasi:
+\begin{enumerate}
+    \item \textbf{Control Flow Recovery}: Viene innanzitutto effettuato il recupero del Control Flow Graph del programma tramite le funzionalità offerte da \textit{angr}.
+    \item \textbf{Subject Caller Identification}: \textit{Arbiter} utilizza il CFG e le informazioni presenti nella VD di $V$ per identificare nel programma le sorgenti di input potenzialmente malevole e i loro sink. 
+    \item \textbf{Data Dependency Recovery}: Viene costruito un DDG per ogni funzione che contiene almeno una sorgente o un sink descritto nella VD di $V$. 
+    Se la VD di $V$ descrive sia sorgenti che sink, allora il DDG costruito per una certa funzione $f$ non conterrà alcuna informazione riguardante le funzioni che
+    chiamano $f$. Altrimenti, verrà costruito un DDG per ogni funzione, sia chiamata che chiamante, che contiene almeno un sink descritto nella VD, invece di costruire in DDG che copra
+    tutte le potenziali sorgenti di input. Questo meccanismo rende la generazione del DDG per il programma più scalabile, al costo, tuttavia, di una perdita di precisione; la quale verrà
+    corretta durante la fase di verifica finale dei risultati.
+    \item \textbf{Backward Slicing e Filtering}: L'identificazione dei flussi potenzialmente vulnerabili avviene tracciando i cammini che collegano le sorgenti ai sink sul DDG e generando i \textbf{sotto-grafi}
+    corrispondenti a tali cammini. Tale processo è equivalente all'effettuare un \textit{program slicing} statico sul programma per ogni flusso di interesse.
+    \item \textbf{Under Constrained Symbolic Execution (UCSE)}: I flussi di dati raccolti durante le fasi precedenti potrebbero non essere realmente vulnerabili: la path condition che caratterizza un determinato flusso di dati
+    potrebbe infatti risultare \textbf{insoddisfacibile} oppure potrebbe \textbf{prevenire il manifestarsi della vulnerabilità $V$ di interesse}. Per ogni flusso di dati individuato, \textit{Arbiter} esegue una \textit{UCSE} sulla
+    \textit{slice} corrispondente in modo da recuperare le relazioni simboliche tra i dati nel cammino dalla sorgente al sink. Se le relazioni recuperate soddisfano i vincoli specificati nella VD di $V$, allora viene
+    segnalata una potenziale vulnerabilità.
+    \item \textbf{Adaptive False Positive Reduction}: Come già discusso nel \textit{capitolo 4}, uno dei problemi della UCSE è la mancanza di informazione riguardante il contesto di esecuzione della funzione analizzata. Per mitigare
+    il numero di falsi positivi introdotti da questa problematica, \textit{Arbiter} effettua la seguente serie di operazioni:
+    \begin{enumerate}
+        \item Quando viene trovata una potenziale vulnerabilità in una funzione $f$, \textit{Arbiter} effettua una ricerca tutti i punti nel programma dove $f$ viene chiamata
+        \item Per ogni punto di chiamata $C$ individuato, viene ripetuta la UCSE includendo il contesto dato da $C$
+    \end{enumerate}
+    Questa serie di operazioni viene ripetuta \textbf{ricorsivamente} fino a raggiungere una \textbf{profondità massima di ricorsione}, la quale è configurabile dall'analista in base al tempo disponibile per effettuare l'analisi.
+\end{enumerate}
+\begin{figure}[H]
+  \makebox[\textwidth][c]{\includegraphics[width=1.3\textwidth]{../images/Arbiter.png}}%
+  \caption{Processo di analisi implementato da Arbiter. Figura proveniente da \cite{Arbier}}
+  \label{fig:key}
+\end{figure}
 \end{document}
-
-
-
-
-

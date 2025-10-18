@@ -1,0 +1,44 @@
+\documentclass[../main.tex]{subfiles}
+\addbibresource{../bibfile.bib}
+
+\begin{document}
+
+\chapter{Implementazione}
+In questo capitolo, si fornirà una descrizione dettagliata dell'architettura della piattaforma Binoculars.
+In particolare, verranno illustrare le implementazioni sia del frontend che del backend,
+illustrando come la loro collaborazione permette all'utente di usare semplicemente le funzionalità offerte dalla piattaforma.
+\section{Architettura}
+L'architettura della piattaforma si suddivide in due componenti principali:
+\begin{itemize}
+    \item \textbf{Frontend}: Il frontend dell'applicazione comprende la logica di caricamento dei file binari e la presentazione
+    dei risultati delle analisi. Questa componente è stata sviluppata utilizzando \textbf{SvelteKit}, un framework leggero e robusto per lo sviluppo
+    di applicazioni web.
+    \item \textbf{Backend}: Il backend dell'applicazione consiste in un server web sviluppato utilizzando il framework python \textbf{Flask}.
+    In particolare, il server si occupa delle seguenti mansioni
+    \begin{itemize}
+        \item Gestione dei file binari caricati dall'utente
+        \item Gestione della sessione HTTP
+        \item Decompiling e Disassembly del file binario
+        \item Applicazione delle diverse tecniche di analisi disponibili e generazione della risposta in formato \textit{JSON}
+    \end{itemize}
+\end{itemize}
+\section{Backend}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

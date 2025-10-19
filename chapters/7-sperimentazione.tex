@@ -1,0 +1,56 @@
+\documentclass[../main.tex]{subfiles}
+\addbibresource{../bibfile.bib}
+
+\begin{document}
+\chapter{Sperimentazione}
+In questo capitolo, verranno presentati e analizzati i risultati ottenuti dall'applicazione
+delle strategie di analisi disponibili sulla piattaforma (\textit{Arbiter} e \textit{Binoculars}).
+Per ogni classe di vulnerabilità considerata, sono stati considerati sia programmi vulnerabili che
+che non vulnerabili.
+\section{Sperimentazioni con VulnDetect}
+Come già esposto nel \textit{capitolo 5}, la strategia di analisi implementata da \textit{VulnDetect} è capace
+solamente di rilevare vulnerabilità di tipo \textit{stack-based buffer overflow} (CWE-121). L'efficacia di questa
+strategia è stata verificata tramite il test di tre file binari.
+\subsection{Test 1: ahgets1-bad}
+Questo programma proviene da una delle test suite messe a disposizione dal \textit{Software Assurance Reference Dataset} (SARD).
+Il codice del programma è il seguente:
+\lstinputlisting[language = C, caption = Codice del programma \textit{ahgets1-bad}]{../tests/VulnDetect/ahgets1-bad.c}
+Durante il ciclo di scrittura, il programma non controlla mai se i dati hanno superato il limite del buffer. Il programma è quindi
+vulnerabile a \textit{stack-based buffer overflow}. I risultati presentati da \textit{VulnDetect} confermano la presenza di una vulnerabilità di questo tipo:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|l|l|l|}
+        \hline
+        Address  & Type                                 & Description                                                                                                  \\ \hline
+        0x40118b & CWE-121: Stack-based buffer overflow  & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
+        0x40117a & CWE-121: Stack-based buffer overflow & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
+        \end{tabular}
+        \caption{Vulnerabilità rilevate da VulnDetect sul programma ahgets1-bad}
+        \end{table}
+\subsection{Test 2: gets1-bad}
+Come il precedente, anche questo programma proviene da una delle test suite messe a disposizione dal \textit{SARD}.
+Il codice del programma è il seguente:
+\lstinputlisting[language = C, caption = Codice del programma \textit{gets1-bad}]{../tests/VulnDetect/gets1-bad.c}
+La mancanza di controlli sui dati che la funzione \textit{fgets} scrive nel buffer rende questo programma vulnerabile
+a \textit{stack-based buffer overflow}. Anche in questo caso, i risultati presentati da \textit{VulnDetect} confermano la presenza della vulnerabilità:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    Address  & Type                                 & Description                                                                                                  \\ \hline
+    0x401159 & CWE-121: Stack-based buffer overflow  & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
+    0x40118d & CWE-121: Stack-based buffer overflow & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
+    \end{tabular}
+    \caption{Vulnerabilità rilevate da VulnDetect sul programma gets1-bad}
+\end{table}
+\subsection{Test 3: }
+
+
+
+
+
+
+
+
+
+\end{document}

@@ -12,9 +12,9 @@ Le tecniche che si basano sull'esecuzione simbolica devono tenere conto del prob
 dimensioni di un programma porta ad un aumento esponenziale dei cammini praticabili presenti sul suo CFG, i quali possono crescere fino a diventare
 potenzialmente infiniti se il programma contiene cicli non vincolati da una condizione di terminazione \cite{SE_Path_explosion}. 
 Per evitare questo problema, l'esecutore simbolico può essere guidato in modo tale che esplori solamente una parte del CFG del programma, in modo tale da evitare che esso
-esplori cammini potenzialmente inutili alla ricerca di vulnerabilità. \textbf{VulnDetect} \cite{VulnDetect} è una tecnica di ricerca per basata su esecuzione simbolica per la ricerca
+esplori cammini potenzialmente inutili alla ricerca di vulnerabilità. \textbf{VulnDetect} \cite{VulnDetect} è una tecnica di ricerca basata su esecuzione simbolica per la ricerca
 di vulnerabilità di tipo \textbf{stack-based buffer-overflow}. L'implementazione di VulnDetect si basa sulle funzionalità offerte dalla piattaforma \textit{angr}.
-Per evitare il problema della \textit{path explosion}, VulnDetect utilizza un'insieme di metodologie di analisi statica per guidare
+Per evitare il problema della \textit{path explosion}, VulnDetect utilizza un insieme di metodologie di analisi statica per guidare
 l'esecutore simbolico ad analizzare solo i cammini potenzialmente vulnerabili del programma.
 \subsection{Buffer overflow e Stack-Based Buffer Overflow}
 Una delle classi di vulnerabilità software più diffuse nel panorama software moderno è quella che prende il nome di \textbf{buffer overflow} (CWE-120).

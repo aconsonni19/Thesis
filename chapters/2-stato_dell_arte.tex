@@ -12,7 +12,7 @@ Verranno in particolare approfonditi alcuni approcci basati su analisi statica, 
 Per ciascuna metodologia presentata, verranno dettagliati il suo funzionamento generale, le sue capacità di analisi e le sue limitazioni
 
 \section{Metodologie basate su tecniche di analisi statica}
-L'analisi statica di un programma consiste in un'insieme di metodologie, tool e algoritmi che permettono l'analisi del codice sorgente o della
+L'analisi statica di un programma consiste in un insieme di metodologie, tool e algoritmi che permettono l'analisi del codice sorgente o della
 sua rappresentazione binaria (per esempio, un file eseguibile) senza che il programma venga effettivamente eseguito \cite{static_analysis_introduction}.
 Questa tecnica è ampiamente adottata nell'ambito della ricerca delle vulnerabilità, in quanto consente di inferire e determinare se
 certe proprietà sono soddisfatte (per esempio, le condizioni che possono portare ad una certa vulnerabilità) senza direttamente eseguire il programma.
@@ -107,7 +107,7 @@ saranno molto simili; potenzialmente portando l'analizzatore a segnalare dei fal
 Nonostante l'approccio proposto porti ad un miglioramento della complessità computazionale dell'analisi e alla mitigazione del numero di falsi positivi e negativi rilevati, l'affidabilità dell'analisi rimane comunque legata ad una soglia scelta manualmente dall'analista.
 Sarà quindi necessario che quest'ultimo imposti una soglia ottimale per ogni specifico binario o classe di vulnerabilità, compromettendo quindi l'automazione del processo.
 \section{Metodologie basate su tecniche di analisi dinamica}
-L'analisi dinamica consiste nell'osservazione del comportamento di un programma mentre esse viene eseguito in un determinato ambiente d'esecuzione.
+L'analisi dinamica consiste nell'osservazione del comportamento di un programma mentre esso viene eseguito in un determinato ambiente d'esecuzione.
 Per consentire questo tipo di analisi, i tool che implementano questo tipo di tecniche devono effettuare un processo chiamato \textit{instrumentation}, il quale
 consiste nell'aggiungere codice di analisi all'interno del programma da analizzare in modo tale che venga eseguito insieme a quest'ultimo senza modificarne il normale
 flusso di esecuzione \cite{DBA_DBI}. I risultati ottenuti tramite l'analisi dinamica sono generalmente più precisi rispetto ai risultati ottenuti effettuando un'analisi statica
@@ -151,12 +151,12 @@ possibile di cammini di esecuzione interessanti. Per i tool di fuzzing, quindi, 
 \section{Tecniche basate su modelli di apprendimento automatico}
 Negli ultimi anni, la ricerca nell'ambito dell'intelligenza artificiale ha compiuto enormi progressi, portando i modelli disponibili ad essere
 sempre più accurati ed efficienti. Questo rapido avanzamento ha avuto un impatto significativo anche nel campo della sicurezza informatica, dove
-le capacità predittive dell'intelligenza artificiale possono essere sfruttate l'identificazione automatica di vulnerabilità.
-Le tecnica di apprendimento automatico possono dividere in base a come avviene l'addestramento del modello:
+le capacità predittive dell'intelligenza artificiale possono essere sfruttate per l'identificazione automatica di vulnerabilità.
+Le tecniche di apprendimento automatico possono essere divise in base a come avviene l'addestramento del modello:
 \begin{itemize}
     \item \textbf{Apprendimento supervisionato}: Si sviluppa un modello predittivo tramite l'addestramento su dati etichettati.
-    \item \textbf{Apprendimento non supervisionato}: Il modello viene applicato su un'insieme di dati non etichettati con lo scopo di trovare una qualche struttura intrinseca del dataset
-    \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obbiettivo, ricevendo una ricompensa o una penalità in base a quanto al scelta che ha compiuto lo avvicina all'obbiettivo
+    \item \textbf{Apprendimento non supervisionato}: Il modello viene applicato su un insieme di dati non etichettati con lo scopo di trovare una qualche struttura intrinseca del dataset
+    \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obbiettivo, ricevendo una ricompensa o una penalità in base a quanto la scelta che ha compiuto lo avvicina all'obbiettivo
 \end{itemize}
 In generale, le tecniche di machine learning per la ricerca di vulnerabilità prevedono l'estrazione di feature significativo dal file binario sotto analisi; le quali verranno poi codificate in un formato idoneo e utilizzate
 dal modello per l'identificazione di potenziali percorsi di esecuzione vulnerabili \cite{ML_Survey}.

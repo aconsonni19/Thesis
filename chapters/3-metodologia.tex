@@ -56,7 +56,7 @@ Quindi, un DDG $D$ per un programma $P$ è un grafo \textbf{diretto e orientato}
     \item Gli archi di $D$ rappresentano le relazioni di dipendenza tra due statement
 \end{itemize}
 Supponiamo, per esempio, di avere il seguente programma e di volerne costruire il DDG:
-\lstinputlisting[language=C, caption = Un programma in C che calcola il prezzo di un prodotto. Esempio proventiente da \cite{DDG}, firstline = 2]{../code_examples/example2.c}
+\lstinputlisting[language=C, caption = Un programma in C che calcola il prezzo di un prodotto. Esempio proveniente da \cite{DDG}, firstline = 2]{../code_examples/example2.c}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \linewidth]{../images/DDG.png}
@@ -72,7 +72,7 @@ Lo slicing di un programma produce il più \textbf{piccolo sottoprogramma esegui
 Un criterio di slicing è una coppia $C = (V, n)$ dove \cite{Sclicing}:
 \begin{itemize}
     \item $V$ è \textbf{l'insieme delle variabili} rilevanti per la computazione di interesse
-    \item $n$ è l'insieme dell \textbf{locazioni di interesse} nel programma 
+    \item $n$ è l'insieme delle \textbf{locazioni di interesse} nel programma 
 \end{itemize}
 Esistono diverse metodologie per effettuare lo slicing di un programma; alcuni esempi sono \cite{Sclicing}::
 \begin{itemize}
@@ -82,7 +82,7 @@ Esistono diverse metodologie per effettuare lo slicing di un programma; alcuni e
 \end{itemize}
 \newpage \noindent
 Proponiamo il seguente esempio: supponiamo di avere il seguente programma e di voler produrre uno slice, utilizzando la tecnica dello \textbf{slicing statico}, rispetto al criterio $(product, 13)$:
-\lstinputlisting[language=C, caption = Un programma in C che calcola il fattoriale di un numero $n$ e la somma da $1$ a $n$. Esempio proventiente da \cite{Sclicing}, firstline = 2]{../code_examples/example3.c}
+\lstinputlisting[language=C, caption = Un programma in C che calcola il fattoriale di un numero $n$ e la somma da $1$ a $n$. Esempio proveniente da \cite{Sclicing}, firstline = 2]{../code_examples/example3.c}
 \lstinputlisting[
   language=C,
   caption={{Slice ottenuta applicando slicing statico rispetto al criterio $(product, 13)$}},
@@ -108,7 +108,7 @@ Un framework di esecuzione simbolica è tendenzialmente composto dalle seguenti 
         Ogni istruzione di branch che viene eseguita dall'esecutore aggiorna la path condition per un determinato cammino con un nuovo vincolo. 
         \item \textbf{Memoria simbolica}: Mappa le variabili a delle espressioni o valori simbolici. Le istruzioni di assegnamento del programma aggiornano la memoria simbolica dell'esecutore.
     \end{itemize}
-    \item \textbf{Model checker}: Un model checker, tipicamente un \textit{Satisfiability modulo theories} (SMT) solver, viene utilizzato per controllare se vi sono delle violazioni logiche nella path condition rispetto ad una proprietà d'interesse (per esempio, una proprietà di sicurezza) e se il cammino è praticabile, cioè se la path condition che
+    \item \textbf{Model checker}: Un model checker, tipicamente un \textit{Satisfiability Modulo Theories} (SMT) solver, viene utilizzato per controllare se vi sono delle violazioni logiche nella path condition rispetto ad una proprietà d'interesse (per esempio, una proprietà di sicurezza) e se il cammino è praticabile, cioè se la path condition che
     lo caratterizza è una formula \textbf{soddisfacibile}. In generale, il problema della soddisfacibilità booleana (conosciuto con il nome di SAT) è un problema \textbf{indecidibile}; tuttavia, può essere risolto in un gran numero di casi pratici; per esempio, 
     i vincoli booleani lineari (es. $X > Y \land X + Y \leq 10$) sono spesso risolubili in maniera efficiente.
 \end{enumerate}
@@ -161,9 +161,9 @@ Lo scopo di un \textit{decompiler} (o \textit{reverse compiler}) è quindi quell
 operazioni del programma binario dato in input. Per effettuare il recupero del codice di un programma, un \textit{decompiler} deve gestire una molteplicità di problemi sia teorici che pratici, tra cui \cite{Cifuentes1994ReverseCT}:
 \begin{itemize}
     \item \textbf{Problemi di rappresentazione}: Nell'architettura di Von Neumann, sia le istruzioni che i dati sono rappresentati nello stesso modo. Dato un byte in memoria, è impossibile determinare se esso rappresenta un'istruzione, un dato (o entrambi) fino a quando quel byte non verrà estratto dalla memoria, posto in un registro e utilizzato di conseguenza.
-    \item \textbf{Codice auto-modificante}: Il \textit{codice auto-modificante} (self-modifying code) si riferisce ad istruzioni o dati preimpostati in memoria che vengono modificati durante l'esecuzione del programma. Un byte in una posizione di memoria può essere modificato per rappresentare un'altra istruzione o un'altro dato. Questa tecnica era particolarmente rilevante duranti gli anni '60 e '70; quando
-    i limiti sulla grandezza della memoria dei calcolatori imponevano un utilizzo efficiente della stessa. Un modo per efficientarne l'uso era di modificare i byte caricati in una certa parte della memoria in modo tale che essi potessero essere riutilizzati come istruzioni o come dati a runtime. La presenza di codice auto-modificante rende più complesso effettuare il decompiling del programma, poiché il decompiler
-    dovrà tenere in considerazione la modifiche introdotte da questa tecnica per recuperare il codice ad alto livello corretto.
+    \item \textbf{Codice auto-modificante}: Il \textit{codice auto-modificante} (self-modifying code) si riferisce ad istruzioni o dati preimpostati in memoria che vengono modificati durante l'esecuzione del programma. Un byte in una posizione di memoria può essere modificato per rappresentare un'altra istruzione o un'altro dato. Questa tecnica era particolarmente rilevante durante gli anni '60 e '70; quando
+    i limiti sulla grandezza della memoria dei calcolatori ne imponevano un utilizzo efficiente. Un modo per ottimizzarne l'uso era di modificare i byte caricati in una certa parte della memoria in modo tale che essi potessero essere riutilizzati come istruzioni o come dati a runtime. La presenza di codice auto-modificante rende più complesso effettuare il decompiling del programma, poiché il decompiler
+    dovrà tenere in considerazione le modifiche introdotte da questa tecnica per recuperare il codice ad alto livello corretto.
     \item \textbf{Subroutine incluse da compilatori e linker}: Quando un programma viene compilato, il compilatore e il linker inseriscono una grande quantità di subroutine legate alle funzioni che queste due componenti svolgono.
     In particolare, il compilatore includerà sempre delle routine di avvio che effettuano il setup dell'ambiente e, se richieste, delle subroutine di supporto al motore d'esecuzione. 
     Queste routine sono di solito scritte in assembly e quindi risultano spesso \textbf{intraducibili} in un linguaggio ad alto livello. 
@@ -171,7 +171,7 @@ operazioni del programma binario dato in input. Per effettuare il recupero del c
     mentre un programma in Pascal che effettua la stessa operazione ne conterrà addirittura più di 40.
 \end{itemize}
 \newpage \noindent
-Concettualmente, un \textit{decompiler} è strutturato in maniera simile ad un compilatore e prevede l'esecuzione di diverse fasi per effettuare la trasformazione da codice macchina a codice ad alto livello \cite{Cifuentes1994ReverseCT}. Queste fasi possono essere strutturare in tre moduli distinti \cite{Cifuentes1995DecompilationOB}:
+Concettualmente, un \textit{decompiler} è strutturato in maniera simile ad un compilatore e prevede l'esecuzione di diverse fasi per effettuare la trasformazione da codice macchina a codice ad alto livello \cite{Cifuentes1994ReverseCT}. Queste fasi possono essere strutturate in tre moduli distinti \cite{Cifuentes1995DecompilationOB}:
 \begin{enumerate}
     \item \textbf{Front-end}:
     \begin{itemize}
@@ -187,7 +187,7 @@ Concettualmente, un \textit{decompiler} è strutturato in maniera simile ad un c
     \end{itemize}
     \item \textbf{Back-end}:
     \begin{itemize}
-        \item Questo modulo si occupa della generazione effettiva del codice decompilato. Questo modulo è quindi \textbf{dipendente dal linguaggio di programmazione in cui si vuole avere il risultato finale}
+        \item Questo modulo si occupa della generazione del codice decompilato. Esso è quindi \textbf{dipendente dal linguaggio di programmazione in cui si vuole avere il risultato finale}
         \item Effettua, opzionalmente, un'ulteriore ristrutturazione del CFG, in modo tale che i costrutti specifici presenti nel linguaggio obbiettivo ma non presenti nel generico insieme di costrutti generato durante la fase precedente vengano utilizzati.
         \item Infine, il modulo genera il codice ad alto livello (codice decompilato)
     \end{itemize}
@@ -195,6 +195,6 @@ Concettualmente, un \textit{decompiler} è strutturato in maniera simile ad un c
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.90\linewidth]{../images/Decompilation.png}
-    \caption{Flusso completo del processo di decompilazione. Immagine proventiente da \cite{Cifuentes1995DecompilationOB}}
+    \caption{Flusso completo del processo di decompilazione. Immagine proveniente da \cite{Cifuentes1995DecompilationOB}}
 \end{figure}
 \end{document}

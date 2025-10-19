@@ -69,7 +69,7 @@ L'efficacia della strategia di analisi implementata da \textit{Arbiter} è stata
 dello stesso programma: una vulnerabile e una non vulnerabile.
 \subsection{Test effettuato per CWE-131}
 Consideriamo il seguente programma vulnerabile a \textit{CWE-131}:
-\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnearbile a CWE-131]{../tests/Arbiter/CWE-131-bad.c}
+\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnerabile a CWE-131]{../tests/Arbiter/CWE-131-bad.c}
 Nel linguaggio \textit{C}, le stringhe sono sempre terminate da un carattere nullo "$\backslash0$". 
 Nel programma, l'allocazione del buffer non tiene però conto del carattere terminatore: viene riservato spazio
 solamente per i caratteri "effettivi" della stringa, il che causa un buffer overflow al momento della copia. La correzione di questa Vulnerabilità è
@@ -104,7 +104,7 @@ la vulnerabilità nel file VD della CWE-131.
 \end{table}
 \subsection{Test effettuato per CWE-134}
 Consideriamo il seguente programma vulnerabile a \textit{CWE-134}:
-\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnearbile a CWE-134]{../tests/Arbiter/CWE-134-bad.c}
+\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnerabile a CWE-134]{../tests/Arbiter/CWE-134-bad.c}
 Nel programma sopra riportato, la vulnerabilità è causata dall'utilizzo diretto della stringa contenuta in \textit{buf}, la quale potrebbe essere stata
 manipolata da un attaccante per portare il programma a leggere dati sullo stack o a sovrascrivere la memoria. I risultati presentati da \textit{Arbiter} confermano
 la presenza della vulnerabilità:
@@ -138,7 +138,7 @@ A differenza del test precedente, l'analisi effettuata da \textit{Arbiter} non r
 \end{table}
 \subsection{Test effettuato per CWE-252}
 Consideriamo il seguente programma Vulnerabile a \textit{CWE-252}:
-\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnearbile a CWE-252]{../tests/Arbiter/CWE-252-bad.c}
+\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnerabile a CWE-252]{../tests/Arbiter/CWE-252-bad.c}
 Il mancato controllo sul valore di ritorno di \textit{setuid} porta il programma sopra riportato porta il programma ad essere potenzialmente
 vulnerabile: se infatti l'operazione svolta da \textit{setuid} fallisce, allora il programma potrebbe comunque continuare l'esecuzione
 mantenendo i privilegi originari. In un programma più complesso, questo tipo di vulnerabilità potrebbe permettere all'attaccante di eseguire, tramite
@@ -159,7 +159,7 @@ di un falso negativo. È quindi necessario rivedere completamente come sono defi
 \end{table}
 \subsection{Test effettuato per CWE-337}
 Consideriamo il seguente programma vulnerabile a \textit{CWE-337}:
-\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnearbile a CWE-337]{../tests/Arbiter/CWE-337-bad.c}
+\lstinputlisting[language = C, caption = Un programma in \textit{C} vulnerabile a CWE-337]{../tests/Arbiter/CWE-337-bad.c}
 L'utilizzo del seed \textit{time(NULL)} porta il generatore di numeri pseudo-casuali ad essere inizializzato con il timestamp
 corrente in secondi. Se un attaccante riesce a capire approssimativamente quando il seed è stato generato, può provare
 a riprodurre \textit{rand()} e trovare il token. L'analisi effettuata da \textit{Arbiter} sul programma è in grado di rilevare correttamente la vulnerabilità:

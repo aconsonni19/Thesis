@@ -1,0 +1,27 @@
+\documentclass[../main.tex]{subfiles}
+\addbibresource{../bibfile.bib}
+
+\begin{document}
+
+\chapter{Conclusioni}
+In un mondo sempre più digitalizzato, nessun processo di sviluppo software si può esimere dall'integrare al suo interno tematiche di sicurezza.
+Effettuare un'analisi di sicurezza accurata contribuisce non solo alla qualità del software rilasciato, ma anche alla protezione di
+dati sensibili dei suoi utenti. È quindi imperativo che la sicurezza di un'applicazione sia considerata \textbf{sin dalle fasi iniziali della sua progettazione}.
+Tuttavia, questo processo ci complica notevolmente quando l'analista ha accesso al solo file eseguibile e deve ricorre al \textit{reverse engineering}, il quale richiede
+competenze specialistiche. Questa difficoltà viene risulta ulteriormente accentuata quando l'esperienza dell'analista in questo campo è limitata.
+\textit{Binoculars} è stata progettata seguendo due principi cardine: la \textbf{semplicità} di utilizzo e la \textbf{democratizzazione} delle tecniche di ricerca automatica delle vulnerabilità. 
+Il livello di astrazione che viene offerto dall'interfaccia della piattaforma permette anche ad analisti poco esperti di effettuare una prima analisi esplorativa del file binario.
+Inoltre, la piattaforma permette di utilizzare due strategia di ricerca automatica delle vulnerabilità, \textit{Arbiter} e \textit{VulnDetect}, per effettuare un'identificazione
+rapida di alcune delle vulnerabilità più comuni che il programma potrebbe contenere. Nonostante \textit{Binoculars} non possa sostituirsi a strumenti di reverse engineering più avanzati, come per esempio
+\textit{gdb}, la piattaforma risulta una soluzione \textbf{pratica e a basso costo} per facilitare l'integrazione delle pratiche di sicurezza all'interno dei processi di sviluppo software, migliorandone al contempo
+la velocità di applicazione.
+\section{Sviluppi futuri}
+\textit{Binoculars} è stata progetta per essere facilmente estensibile con ulteriori raffinamenti e nuove tecniche di analisi. Alcuni sviluppi futuri di questo progetto sono:
+\begin{itemize}
+    \item Permettere il caricamento e l'analisi di file binari con formati eseguibili diversi da \textit{ELF}.
+    \item Integrare ulteriori tecniche di analisi, permettendo quindi alla piattaforma di coprire la ricerca di più classi di vulnerabilità.
+    \item Effettuare una sperimentazione più approfondita delle tecniche di analisi attualmente rese disponibili dalla piattaforma, utilizzando un dataset più strutturato e ricco di esempi.
+    \item Raffinare ulteriormente le \textit{Vulnerability Description}, così che essa possano fornire una caratterizzazione più precisa della vulnerabilità a cui fanno riferimento.
+\end{itemize}
+
+\end{document}

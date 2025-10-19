@@ -35,7 +35,7 @@ Supponiamo, per esempio, di avere il seguente programma e di volerne costruire i
 \end{figure}
 \section{Data Dependence Graph (DDG)}
 Quando si effettua l'analisi di un programma, oltre alla rappresentazione del flusso di controllo tramite CFG, risulta a volte utile tracciare le relazioni di dipendenza che sussistono tra le istruzioni del programma.
-Questo tipo di analisi permette infatti di individuare l'origine e l'utilizzo di variabili potenzialmente inquinate da dati malevoli. Per rappresentare queste relazioni possiamo usare una struttura a grafo che prende il nome
+Questo tipo di analisi permette infatti di individuare l'origine e l'utilizzo di variabili potenzialmente inquinate da dati malevoli. Per rappresentare queste relazioni, possiamo usare una struttura a grafo che prende il nome
 di \textbf{Data-Dependence Graph} (DDG). Possiamo derivare un DGG direttamente dal CFG di un programma, tuttavia dobbiamo avere prima una definizione chiara di \textbf{dipendenza} fra gli statement; una possibile definizione è quella che prende il nome di \textbf{dipendenza per flusso} (flow-dependence) \cite{DDG}:
 Sia $G = (V, E)$ il CFG per un programma $P$ e siano $DEF(i)$ e $REF(i)$ gli insiemi che denotano rispettivamente le variabili definite e referenziate in un nodo $i \in V$ del CFG.
 Allora, un nodo $j \in V$ è \textbf{dipendente} dal nodo $i$ rispetto ad una certa variabile se e solo se esiste una variabile $x$ tale che:
@@ -67,7 +67,7 @@ La ricerca di vulnerabilità in software di grandi dimensioni può consumare una
 Inoltre, non tutte le computazioni effettuate da un programma sono rilevanti o potenzialmente vulnerabili. 
 In questi casi, è possibile ridurre la dimensione dello spazio delle istruzioni da analizzare utilizzando una particolare tecnica di decomposizione
 chiamata \textbf{program slicing}.
-Questa tecnica produce un nuovo sottoprogramma, denominata \textit{slice}, che include solamente le istruzioni di interesse per una determinata computazione del programma.
+Questa tecnica produce un nuovo sottoprogramma, denominato \textit{slice}, che include solamente le istruzioni di interesse per una determinata computazione del programma.
 Lo slicing di un programma produce il più \textbf{piccolo sottoprogramma eseguibile} che mantiene il comportamento del programma originale rispetto a quella computazione ed è prodotto rispetto ad un \textbf{criterio di slicing}.
 Un criterio di slicing è una coppia $C = (V, n)$ dove \cite{Sclicing}:
 \begin{itemize}

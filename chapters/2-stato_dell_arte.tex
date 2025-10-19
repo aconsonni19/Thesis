@@ -18,7 +18,7 @@ Questa tecnica è ampiamente adottata nell'ambito della ricerca delle vulnerabil
 certe proprietà sono soddisfatte (per esempio, le condizioni che possono portare ad una certa vulnerabilità) senza direttamente eseguire il programma.
 Tuttavia, l'analisi statica condotta direttamente su un file binario è intrinsecamente più complessa rispetto all'analisi statica del codice sorgente:
 le principali difficoltà risiedono nella mancanza di informazioni riguardante i tipi e la struttura ad alto livello del codice \cite{Review_of_static_analysis} e nella necessità di gestire e rappresentare adeguatamente le operazioni riguardanti la memoria \cite{CodeSurfer}.
-Nonostante queste sfide, nel corso degli anni sono stati sviluppati diversi approcci e metodologie di analisi statica progettati per effettuare la ricerca di vulnerabilità all'interno di file binari.
+Nonostante queste sfide, nel corso degli anni sono stati sviluppati diversi approcci e metodologie di analisi statica, progettati per effettuare la ricerca di vulnerabilità all'interno di file binari.
 Queste tecniche, tuttavia, possono produrre un elevato numero di falsi positivi e falsi negativi : poiché non effettuano un'esecuzione concreta del programma,
 esse devono effettuare diverse assunzioni sul suo stato a runtime. Ciò potrebbe quindi portare i tool basati su questa tipologia di analisi a segnalare vulnerabilità in porzioni di programma non vulnerabili.
 \subsection{Taint analysis statica}
@@ -52,7 +52,7 @@ Tuttavia il tool risulta comunque dipendente dall'input dell'analista; l'accurat
 di quest'ultimo. Infine, Bintaint si basa sul framework commerciale IDA, il quale non offre tutte le sue funzionalità nella sua versione gratuita.
 \subsection{Binary Code Similarity Detection}
 Quando l'obbiettivo dell'analisi è ricercare una vulnerabilità nota (per esempio, una debolezza già documentata), è possibile adottare una strategia chiamata \textit{Binary Code Similarity Detection} (BCSD).
-Questo approccio si basa sul confronto il codice binario del programma in esame con la firma (il codice binario) della vulnerabilità.
+Questo approccio si basa sul confronto del codice binario del programma in esame con la firma (il codice binario) della vulnerabilità.
 Se l'algoritmo di analisi rileva segmenti di codice con un elevato grado di somiglianza con la firma della vulnerabilità, allora è altamente probabile che il programma
 contenga quella vulnerabilità. Un algoritmo di decisione determinerà se il programma contiene effettivamente la vulnerabilità.
 Tuttavia, poiché il codice contente la vulnerabilità spesso richiede solo piccole modifiche per fare in modo che esso non sia più vulnerabile (l'aggiunta di un controllo, l'impostazione di permessi aggiuntivi, ...), il codice binario del programma corretto e il programma originale
@@ -138,7 +138,7 @@ Inoltre, le tecniche di fuzzing possono essere divise in tre categorie \cite{Fuz
 \begin{itemize}
     \item \textbf{White-box fuzzing}: In questo tipo di fuzzing, si assume di avere accesso al codice sorgente del programma; la maggior parte delle informazioni per generare l'input viene quindi acquisita tramite l'analisi del codice sorgente
     \item \textbf{Black-box fuzzing}: Nel fuzzing black-box si effettua il fuzzing sul programma senza avere nessuna informazione sulla sua struttura interna
-    \item \textbf{Gray-box fuzzing}: Questo tipo di fuzzer effettuano un'analisi del programma (come taint analysis o tramite instrumentation) per ottenere le informazioni sulla struttura interna di quest'ultimo
+    \item \textbf{Gray-box fuzzing}: Questo tipo di fuzzer effettuano un'analisi del programma (come taint analysis o tramite instrumentation) per ottenere le informazioni sulla sua struttura interna.
 \end{itemize}
 \begin{figure}[H]
     \centering
@@ -146,7 +146,7 @@ Inoltre, le tecniche di fuzzing possono essere divise in tre categorie \cite{Fuz
     \caption{Funzionamento generale di un fuzzer. Immagine proveniente da \cite{Fuzzing_soa}}
 \end{figure}
 Seppur sia una tecnica efficiente e ben conosciuta per effettuare l'analisi di un programma, il fuzzing risente di diverse problematiche, come la necessità, nei fuzzer gray-box e black-box, di generare un input che passi i controlli di sanificazione del programma senza avere
-informazioni su quest'ultimo, permettendo così un'analisi più approfondita del programma. Altra problematica è quella legata alla definizione, nei fuzzer mutation-based, di una buona tecnica di mutazione dell'input, in modo da poter analizzare il maggior numero
+informazioni su quest'ultimo, permettendo così un'analisi più approfondita. Altra problematica è quella legata alla definizione, nei fuzzer mutation-based, di una buona tecnica di mutazione dell'input, in modo da poter analizzare il maggior numero
 possibile di cammini di esecuzione interessanti. Per i tool di fuzzing, quindi, la problematica principale da superare è quella di \textbf{implementare una buona strategia di generazione e mutazione dell'input}, in modo tale che essa permetta all'analisi di essere il più approfondita possibile.
 \section{Tecniche basate su modelli di apprendimento automatico}
 Negli ultimi anni, la ricerca nell'ambito dell'intelligenza artificiale ha compiuto enormi progressi, portando i modelli disponibili ad essere
@@ -158,20 +158,20 @@ Le tecniche di apprendimento automatico possono essere divise in base a come avv
     \item \textbf{Apprendimento non supervisionato}: Il modello viene applicato su un insieme di dati non etichettati con lo scopo di trovare una qualche struttura intrinseca del dataset
     \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obbiettivo, ricevendo una ricompensa o una penalità in base a quanto la scelta che ha compiuto lo avvicina all'obbiettivo
 \end{itemize}
-In generale, le tecniche di machine learning per la ricerca di vulnerabilità prevedono l'estrazione di feature significativo dal file binario sotto analisi; le quali verranno poi codificate in un formato idoneo e utilizzate
+In generale, le tecniche di machine learning per la ricerca di vulnerabilità prevedono l'estrazione di feature significative dal file binario sotto analisi; le quali verranno poi codificate in un formato idoneo e utilizzate
 dal modello per l'identificazione di potenziali percorsi di esecuzione vulnerabili \cite{ML_Survey}.
 Sono state proposti diversi approcci basati su machine learning, per esempio \textit{Aumpansub} \& \textit{Huang} \cite{ML1} propongono di estrarre le informazioni sintattiche dal codice assembly e di addestrare
-due modelli per il riconoscimento, mentre \textit{Li et al.} \cite{DeepVL} propongono invece di usare come input di addestrare una rete neurale al riconoscimento di vulnerabilità tramite l'utilizzo di tracce di esecuzione del programma ottenute tramite fuzzing.
+due modelli per il riconoscimento, mentre \textit{Li et al.} \cite{DeepVL} propongono invece di addestrare una rete neurale al riconoscimento di vulnerabilità tramite l'utilizzo di tracce di esecuzione del programma ottenute tramite fuzzing.
 La ricerca automatica di vulnerabilità in file binari tramite machine learning è un campo relativamente nuovo e, come tale, soffre di alcune problematiche \cite{ML2}:
 \begin{itemize}
     \item \textbf{Mancanza della struttura ad alto livello del codice}: Come per l'analisi statica, la mancanza di informazioni sui tipi o sulle funzioni chiamate rende difficile l'applicazione di questo tipo di tecniche
     \item \textbf{Selezione delle feature}: È necessario definire quali sono le feature rilevanti e sviluppare una metodologia per estrarle
-    \item \textbf{Selezione del modello}: Bisogna selezionare un modello che permetta di ottenere un grado accettabile di accuratezza. Questo compito è reso particolarmente difficile dal fatto che diversi modelli possono ottenere un'accuratezza comparabile a parità di analisi da effettuare.  
+    \item \textbf{Selezione del modello}: Bisogna selezionare un modello che permetta di ottenere un grado accettabile di accuratezza. Questo compito è reso particolarmente difficile dal fatto che diversi modelli possono ottenere un'accuratezza comparabile sullo stesso compito di analisi.  
 \end{itemize}
 \section{Tecniche ibride}
 I vari approcci all'analisi di sicurezza presentati fino ad ora non devono essere pensati come insiemi disgiunti. Infatti, la combinazione di queste tecniche è una pratica estremamente diffusa e proficua, visto che permette
 di controbilanciare i punti deboli di ciascuna metodologia e di ottenere risultati più accurati. Per esempio, combinare tecniche di analisi statica e dinamica permette di mitigare il numero di falsi positivi ottenuti dalla prima
-effettuando un'esplorazione mirata tramite la seconda. Oppure le tecniche di analisi statica e dinamica possono essere usate per ottenere ed estrarre le feature necessarie all'addestramento del modello di riconoscimento (come abbiamo già visto con DeepVL \cite{DeepVL}).
+effettuando un'esplorazione mirata tramite la seconda. Oppure, le tecniche di analisi statica e dinamica possono essere usate per ottenere ed estrarre le feature necessarie all'addestramento del modello di riconoscimento (come abbiamo già visto con DeepVL \cite{DeepVL}).
 
 
 

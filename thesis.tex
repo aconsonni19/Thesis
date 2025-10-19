@@ -27,6 +27,7 @@ sorting=none,
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage[export]{adjustbox}
+\usepackage{appendix}
 
 
 \useunder{\uline}{\ul}{}
@@ -48,6 +49,22 @@ sorting=none,
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
@@ -132,15 +149,137 @@ sorting=none,
     \subfile{chapters/5-analisi.tex}
     % Capitolo 6
     \subfile{chapters/6-implementazione.tex}
-
-
     \clearpage
     \fancypagestyle{bibliopage}{
         \fancyhf{}
         \fancyhead[R]{\textit{Pagina \thepage}}
         \fancyhead[L]{\textit{Bibliografia}} % oppure lascia vuoto se preferisci
     }
-
     \pagestyle{bibliopage}
     \printbibliography[heading=bibintoc]
+
+    \clearpage
+    \fancypagestyle{appendixA}{
+        \fancyhf{}
+        \fancyhead[R]{\textit{Pagina \thepage}}
+        \fancyhead[L]{\textit{Appendice A}} % oppure lascia vuoto se preferisci
+    }
+    \pagestyle{appendixA}
+
+    \begin{appendices}
+        \chapter{Codice relativo al backend}
+        Questa appendice contiene il codice sviluppato per il backend della piattaforma.
+        \section{Server web}
+        Il codice del server web è suddiviso nelle seguenti funzioni:
+        \lstinputlisting[
+            language=Python,
+            caption={Enpoint \textit{/upload}},
+            firstline = 29,
+            lastline = 41
+        ]{../Binoculars/backend/wsgi.py}
+
+
+        \lstinputlisting[
+            language=Python,
+            caption={Endpoint \textit{/decompile}},
+            firstline = 94,
+            lastline = 117        
+            ]{../Binoculars/backend/wsgi.py}
+
+        \lstinputlisting[
+            language=Python,
+            caption={Endpoint \textit{/disassemble}},
+            firstline = 47,
+            lastline = 88        
+            ]{../Binoculars/backend/wsgi.py}
+
+        \newpage
+        \lstinputlisting[
+            language=Python,
+            caption={Endpoint \textit{/analyses/vulndetect}},
+            firstline = 123,
+            lastline = 141]{../Binoculars/backend/wsgi.py}
+
+        \lstinputlisting[
+            language=Python,
+            caption={Endpoint \textit{/analyses/arbiter}},
+            firstline = 147,
+            lastline = 179        ]{../Binoculars/backend/wsgi.py}
+
+        \lstinputlisting[
+            language=Python,
+            caption={Funzione \textit{find\_vd\_files}},
+            firstline = 184,
+            lastline = 195        ]{../Binoculars/backend/wsgi.py}
+
+        \lstinputlisting[
+            language=Python,
+            caption={Funzione \textit{save\_file}},
+            firstline = 201,
+            lastline = 211        ]{../Binoculars/backend/wsgi.py}
+
+        \section{Classi wrapper per le analisi}
+        Questa sezione contiene il codice delle classi wrapper che permettono l'accesso alle tecniche di analisi
+        alla piattaforma.
+        \subsection{VulnDetect}
+        Come già trattato nel \textit{capitolo 3}, VulnDetect mantiene una lista di funzioni vulnerabili:
+        \lstinputlisting[
+            language=Python,
+            lastline = 35,
+            caption={Funzioni considerate potenzialmente pericolose da \protect\textit{VulnDetect}}
+            ]{../Binoculars/backend/analyses/VulnDetection/VulnDetection.py}
+        Il codice della classe wrapper per \textit{VulnDetect} può essere suddiviso nei seguenti metodi:
+        \lstinputlisting[
+            language=Python,
+            firstline = 38,
+            lastline = 64,
+            caption={Metodo init della classe wrapper per \protect\textit{VulnDetect}}
+            ]{../Binoculars/backend/analyses/VulnDetection/VulnDetection.py}
+        \lstinputlisting[
+            language=Python,
+            firstline = 66,
+            lastline = 106,
+            caption={Metodo static\_analysis della classe wrapper per \protect\textit{VulnDetect}}
+            ]{../Binoculars/backend/analyses/VulnDetection/VulnDetection.py}
+        \newpage
+        \lstinputlisting[
+            language=Python,
+            firstline = 108,
+            lastline = 148,
+            caption={Metodo vulnerability\_detection della classe wrapper per \protect\textit{VulnDetect}}
+            ]{../Binoculars/backend/analyses/VulnDetection/VulnDetection.py}
+        \newpage
+        \lstinputlisting[
+            language=Python,
+            firstline = 151,
+            caption={Metodo analyze della classe wrapper per \protect\textit{VulnDetect}}
+            ]{../Binoculars/backend/analyses/VulnDetection/VulnDetection.py}
+
+        \subsection{Arbiter}
+        Il codice della classe wrapper per \textit{Arbiter} può essere suddiviso nei seguenti metodi:
+        \lstinputlisting[
+            language=Python,
+            firstline = 6,
+            lastline = 29,
+            caption={Metodo init della classe wrapper per \protect\textit{Arbiter}}
+            ]{../Binoculars/backend/analyses/arbiter/ArbiterAnalysis.py}
+        \lstinputlisting[
+            language=Python,
+            firstline = 31,
+            lastline = 49,
+            caption={Metodo enable\_logging della classe wrapper per \protect\textit{Arbiter}}
+            ]{../Binoculars/backend/analyses/arbiter/ArbiterAnalysis.py}
+        \lstinputlisting[
+            language=Python,
+            firstline = 50,
+            lastline = 92,
+            caption={Metodo setup della classe wrapper per \protect\textit{Arbiter}}
+            ]{../Binoculars/backend/analyses/arbiter/ArbiterAnalysis.py}
+        \lstinputlisting[
+            language=Python,
+            firstline = 94,
+            lastline = 118,
+            caption={Metodo analyze della classe wrapper per \protect\textit{Arbiter}}
+            ]{../Binoculars/backend/analyses/arbiter/ArbiterAnalysis.py}
+    \end{appendices}
 \end{document}

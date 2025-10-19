@@ -1,0 +1,10 @@
+{
+    "BIN_UPLOAD_FOLDER": "CARTELLA DOVE SALVARE I FILE CARICATI",
+    "GHIDRA_INSTALL_FOLDER": "CARTELLA DI INSTALLAZIONE DI GHIDRA",
+    "ANGR_MAX_DEPTH": 1000,
+    "ARBITER_JSON_RESULTS_FOLDER": "./analyses/arbiter/arbiter_results/jsons",
+    "ARBITER_LOGS_FOLDER": "./analyses/arbiter/arbiter_results/logs",
+    "ARBITER_CWE_VD_REGEX": "^CWE\\d+.*\\.py$",
+    "ARBITER_FUNCTIONS_BLACKLIST": [],
+    "ARBITER_VD_FOLDER": "./analyses/arbiter/vuln_templates"
+}

@@ -1,0 +1,14 @@
+{
+    "disassembly": [
+        {
+            "instructions": [
+                {
+                    "addr": "INDIRIZZO DELL'ISTRUZIONE",
+                    "mnemonic": "OPERANDO",
+                    "op_str": "OPERANDI"
+                },
+                ...
+            ]
+        }
+    ]
+}

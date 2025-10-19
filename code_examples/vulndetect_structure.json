@@ -1,0 +1,6 @@
+{
+    "INDIRIZZO_OPERAZIONE_VULNERABILE": {
+        "Description": "DESCRIZIONE DELLA VULNERABILITA'",
+        "Vulnerability_found": "CWE-121"
+    },  ...
+}

@@ -6,7 +6,7 @@
 \chapter{Introduzione}
 \label{chap:intro}
 In un mondo sempre più digitalizzato ed interconnesso, la tematica della sicurezza informatica ha assunto sempre più un'importanza chiave in ogni processo di sviluppo software. 
-La potenziale presenza e lo sfruttamento di una vulnerabilità all'interno di un'applicazione, da parte di un'attaccante, potrebbe avere conseguenze disastrose: dall'escalation di privilegi
+La potenziale presenza e lo sfruttamento di una vulnerabilità all'interno di un'applicazione, da parte di un attaccante, potrebbe avere conseguenze disastrose: dall'escalation di privilegi
 all'accesso non autorizzato a dati sensibili, compromettendo quindi l'integrità e la confidenzialità di quest'ultimi.
 È quindi fondamentale che i potenziali rischi per la sicurezza siano considerati sin dai primi momenti del processo di sviluppo.
 Effettuare un'analisi di sicurezza approfondita risulta quindi fondamentale nell'evitare che potenziali vulnerabilità persistano all'interno del programma; tuttavia, questo processo
@@ -14,18 +14,18 @@ si complica notevolmente quando l'analista è in \textbf{solo possesso del file 
 In questo caso, l'analista non solo dovrà avere ampie competenze specifiche in ambito di reverse engineering, ma dovrà essere in grado di utilizzare tool e framework che potrebbero avere
 un'interfaccia a primo impatto ostica, richiedere conoscenze di scripting o di tematiche di sicurezza avanzate oppure avere un costo elevato, il quale potrebbe non rientrare nei limiti
 di budget prefissati. 
-Questa tesi propone l'implementazione di una piattaforma web per l'analisi di file binari denominata \textbf{Binoculars}; la quale si prefigge l'obbiettivo di
+Questa tesi propone l'implementazione di una piattaforma web per l'analisi di file binari denominata \textbf{Binoculars}; la quale si prefigge l'obiettivo di
 semplificare il processo di analisi di sicurezza su file binari ELF compilati per architettura x86 tramite un'interfaccia semplice ed intuitiva, permettendo anche ad analisti con competenze di sicurezza non specialistiche di 
 effettuare una prima valutazione del programma, la quale potrà poi essere approfondita tramite analisi più specifiche.
-La piattaforma si basa su \textbf{angr}, un toolkit open-source multi-architettura per l'analisi binaria, per eseguire automaticamente diverse tipologie di analisi statiche e dinamiche, sul framework python \textbf{Flask} per l'implementazione di una REST API progettata per 
-comunicare i risultati dell'analisi e sul framework javascript \textbf{SvelteKit}, il quale si occupa della strutturazione delle pagine web della piattaforma e della presentazione dei risultati dell'analisi all'utente.
+La piattaforma si basa su \textbf{angr}, un toolkit open-source multi-architettura per l'analisi binaria, per eseguire automaticamente diverse tipologie di analisi statiche e dinamiche, sul framework Python \textbf{Flask} per l'implementazione di una REST API progettata per 
+comunicare i risultati dell'analisi e sul framework JavaScript \textbf{SvelteKit}, il quale si occupa della strutturazione delle pagine web della piattaforma e della presentazione dei risultati dell'analisi all'utente.
 \section{Differenza tra debolezza e vulnerabilità}
 Spesso il termine "vulnerabilità" è utilizzato per riferirsi ad una qualsiasi problematica di sicurezza all'interno del software sotto analisi.
 Tuttavia, è fondamentale distinguere il concetto di \textbf{vulnerabilità} da quello di \textbf{debolezza}.
 Per delineare con precisione questa distinzione, adotteremo le definizioni fornite dal glossario compilato dal MITRE \cite{mitre_glossary}:
 \begin{itemize}
     \item \textbf{Debolezza}: Una condizione nel software, firmware, hardware o in una componente di servizio che, sotto certe circostanze, potrebbe contribuire all'introduzione di vulnerabilità
-    \item \textbf{Vulnerabilità}: Un errore nel software, firmware, hardware o componente di servizio \textbf{derivante dalla presenza di una debolezza} che può essere sfruttata da un'attaccante, causando un impatto negativo sull'integrità, la confidenzialità e la disponibilità dei componenti impattati
+    \item \textbf{Vulnerabilità}: Un errore nel software, firmware, hardware o componente di servizio \textbf{derivante dalla presenza di una debolezza} che può essere sfruttata da un attaccante, causando un impatto negativo sull'integrità, la confidenzialità e la disponibilità dei componenti impattati
 \end{itemize}
 Una vulnerabilità è quindi \textbf{un'istanza sfruttabile di una debolezza}.
 Per riferirci alle categorie di difetti che le tecniche di analisi automatica offerte dalla piattaforma sono in grado di rivelare, questa tesi adotterà la tassonomia \textbf{Common Weakness Enumeration} (CWE), anch'essa compilata dal MITRE.
@@ -39,7 +39,7 @@ La relazione è articolata nei seguenti capitoli:
     \item \textbf{Capitolo 4: Tecnologie utilizzate}: Questo capitolo presenta in dettaglio le tecnologie e i framework scelti per l'implementazione delle tecniche di analisi rese disponibili dalla piattaforma. Verrà approfondito il funzionamento interno e le funzionalità per ogni tecnologia impiegata.
     \item \textbf{Capitolo 5: Analisi implementate}: Questo capitolo illustra nel dettaglio le analisi implementate all'interno della piattaforma. Verrà descritto come ciascuna tecnica di analisi porti al rilevamento di una vulnerabilità e verrà fornita una lista comprensiva di tutte le debolezza software che ogni tecnica è capace di rilevare.
     \item \textbf{Capitolo 6: Architettura della soluzione}: Questo capitolo descrive l'architettura generale della piattaforma Binoculars. Verrà illustrato il modello architetturale della soluzione, illustrando le interazioni fra i vari componenti e come essi collaborano per presentare all'utente il risultato dell'analisi richiesta.   
-    \item \textbf{Capitolo 7: Sperimentazione} Questo capitolo presenta le varie sperimentazioni effettuate sulla piattaforma al fine di validarne l'accuratezza. Per ogni tecnica di analisi implementata, verranno presentati i programmi che sono stati utilizzati al fine di validare l'efficacia e l'accuratezza dell'analisi e i risultati prodotti da quest'ultima.
+    \item \textbf{Capitolo 7: Sperimentazione} Questo capitolo presenta le varie sperimentazioni effettuate sulla piattaforma al fine di validarne l'accuratezza. Per ogni tecnica di analisi implementata, verranno presentati i programmi che sono stati utilizzati al fine di validare l'efficacia e l'accuratezza dell'analisi e i risultati da essa prodotti.
     \item \textbf{Capitolo 8: Conclusioni}: Questo capitolo presenterà le conclusioni finali del lavoro. Saranno inoltre esposti i possibili sviluppi futuri della piattaforma.
 \end{itemize}
 \end{document}

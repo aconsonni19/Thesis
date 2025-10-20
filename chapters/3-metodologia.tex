@@ -36,7 +36,7 @@ Supponiamo, per esempio, di avere il seguente programma e di volerne costruire i
 \section{Data Dependence Graph (DDG)}
 Quando si effettua l'analisi di un programma, oltre alla rappresentazione del flusso di controllo tramite CFG, risulta a volte utile tracciare le relazioni di dipendenza che sussistono tra le istruzioni del programma.
 Questo tipo di analisi permette infatti di individuare l'origine e l'utilizzo di variabili potenzialmente inquinate da dati malevoli. Per rappresentare queste relazioni, possiamo usare una struttura a grafo che prende il nome
-di \textbf{Data-Dependence Graph} (DDG). Possiamo derivare un DGG direttamente dal CFG di un programma, tuttavia dobbiamo avere prima una definizione chiara di \textbf{dipendenza} fra gli statement; una possibile definizione è quella che prende il nome di \textbf{dipendenza per flusso} (flow-dependence) \cite{DDG}:
+di \textbf{Data Dependence Graph} (DDG). Possiamo derivare un DGG direttamente dal CFG di un programma, tuttavia dobbiamo avere prima una definizione chiara di \textbf{dipendenza} fra gli statement; una possibile definizione è quella che prende il nome di \textbf{dipendenza per flusso} (flow-dependence) \cite{DDG}:
 Sia $G = (V, E)$ il CFG per un programma $P$ e siano $DEF(i)$ e $REF(i)$ gli insiemi che denotano rispettivamente le variabili definite e referenziate in un nodo $i \in V$ del CFG.
 Allora, un nodo $j \in V$ è \textbf{dipendente} dal nodo $i$ rispetto ad una certa variabile se e solo se esiste una variabile $x$ tale che:
 \begin{enumerate}
@@ -74,9 +74,9 @@ Un criterio di slicing è una coppia $C = (V, n)$ dove \cite{Sclicing}:
     \item $V$ è \textbf{l'insieme delle variabili} rilevanti per la computazione di interesse
     \item $n$ è l'insieme delle \textbf{locazioni di interesse} nel programma 
 \end{itemize}
-Esistono diverse metodologie per effettuare lo slicing di un programma; alcuni esempi sono \cite{Sclicing}::
+Esistono diverse metodologie per effettuare lo slicing di un programma; alcuni esempi sono \cite{Sclicing}:
 \begin{itemize}
-    \item \textbf{Program slicing statico (Backwards slicing)} Questa tecnica produce uno slice del programma senza tenere in considerazione l'input del programma. Fu la prima tecnica di slicing ad essere presentata \cite{weiser1981program}.
+    \item \textbf{Program slicing statico (Backwards slicing)} Questa tecnica produce uno slice senza tenere in considerazione l'input del programma. Fu la prima tecnica di slicing ad essere presentata \cite{weiser1981program}.
     \item \textbf{Program slicing dinamico}: Proposta da Korel e Laski \cite{korel1988dynamic}, questo tipo di slicing si basa sulla computazione dello slice tenendo in considerazione l'input ricevuto dal programma, il suo percorso di esecuzione e le relazioni di dipendenza tra gli statement.
     \item \textbf{Conditioned slicing}: Questa tecnica funge da ponte tra slicing dinamico e statico. Nel conditioned slicing, una condizione di slicing è una tripla $C_{cond} = (p, V, n)$, dove $p$ è una qualche condizione iniziale di interesse.
 \end{itemize}
@@ -89,7 +89,7 @@ Proponiamo il seguente esempio: supponiamo di avere il seguente programma e di v
   firstline=2
 ]{../code_examples/slice.c}
 \section{Esecuzione simbolica}
-Quando avviene la costruzione di un control flow graph per un programma, l'obbiettivo d'interesse è quello di rappresentare tutti i suoi possibili flussi di esecuzione.
+Quando avviene la costruzione di un control flow graph per un programma, l'obiettivo d'interesse è quello di rappresentare tutti i suoi possibili flussi di esecuzione.
 Tuttavia, ciò che non viene considerato durante la costruzione di un CFG è l'effettiva praticabilità dei suoi cammini; infatti alcuni cammini presenti sul CFG potrebbero
 essere \textbf{irraggiungibili} da un qualsiasi input dato al programma. Possiamo classificare i cammini su un CFG in due diverse categorie:
 \begin{itemize}
@@ -98,7 +98,7 @@ essere \textbf{irraggiungibili} da un qualsiasi input dato al programma. Possiam
     Spesso, una grossa porzione di tutti i cammini di esecuzione di un programma sono impraticabili.
 \end{itemize}
 \textbf{L'esecuzione simbolica} funge da ponte tra il comportamento di un programma e la sua logica. 
-A differenza dell'esecuzione concreta di un programma, la quale utilizza un input concreto e permette di analizzare solamente un determinato cammino di esecuzione del programma,
+A differenza dell'esecuzione concreta di un programma, la quale utilizza un input concreto e permette di analizzare solamente un determinato cammino di esecuzione,
 l'esecuzione simbolica permette di \textbf{esplorare simultaneamente tutti i cammini praticabili} che il programma potrebbe intraprendere al variare dell'input, eseguendo il programma con valori simbolici \cite{Symbolic_exc_1}.
 Un framework di esecuzione simbolica è tendenzialmente composto dalle seguenti componenti \cite{Symbolic_exc_1}:
 \begin{enumerate}
@@ -115,7 +115,7 @@ Un framework di esecuzione simbolica è tendenzialmente composto dalle seguenti 
 L'esecuzione simbolica di un programma può, inoltre, avvenire in due diversi modi:
 \begin{itemize}
     \item \textbf{Esecuzione simbolica statica}: L'esecuzione avviene senza effettivamente eseguire il programma. Vengono esplorati tutti i possibili cammini praticabili del CFG.
-    \item \textbf{Esecuzione simbolica dinamica (analisi concolica)}: l'esecuzione simbolica del programma viene affiancata ad un'esecuzione; vengono quindi esplorati ed eseguiti simbolicamente solo i cammini raggiunti dal valore concreto dell'input.
+    \item \textbf{Esecuzione simbolica dinamica (analisi concolica)}: l'esecuzione simbolica del programma viene affiancata ad un'esecuzione concreta; vengono quindi esplorati ed eseguiti simbolicamente solo i cammini raggiunti dal valore concreto dell'input.
 \end{itemize}
 Supponiamo, per esempio, di voler eseguire simbolicamente (in maniera statica) il seguente programma:
 \lstinputlisting[
@@ -141,13 +141,13 @@ Questo processo è noto con il nome di \textbf{disassembling}. Effettuare il dis
 di basso livello che verranno eseguite dal calcolatore, rendendo possibile l'individuazione di potenziali problematiche di sicurezza sfruttabili da un attaccante.
 Seppur sembri un processo relativamente semplice, effettuare il disassembly di un codice macchina richiede di gestire diverse problematiche \cite{Disassembly2}:
 \begin{itemize}
-    \item \textbf{Jump tables}: una \textit{jump-table} è un array di indirizzi comunemente usata per per implementare trasferimenti del flusso di controllo multi-direzionali (ad esempio, la trasposizione a basso livello del costrutto \textit{switch} del linguaggio \textit{C}).
-    L'idea alla base dell'utilizzo di una jump table è quella di recuperare l'indirizzo a cui saltare indicizzando l'array con il valore dell'espressione per poi effettuare un jump indiretto verso l'indirizzo recuperato.
+    \item \textbf{Jump tables}: una \textit{jump-table} è un array di indirizzi comunemente usata per implementare trasferimenti del flusso di controllo multi-direzionali (ad esempio, la trasposizione a basso livello del costrutto \textit{switch} del linguaggio \textit{C}).
+    L'idea alla base dell'utilizzo di una jump table è quella di recuperare l'indirizzo a cui saltare indicizzando l'array con il valore dell'espressione, per poi effettuare un jump indiretto verso l'indirizzo recuperato.
     Il codice che si occupa di questo processo è di solito preceduto da un controllo sul valore dell'espressione (\textit{bound check}) per assicurarsi che non si stia cercando di accedere ad un indice non presente nell'array.
     Un disassembler dovrà quindi necessariamente stimare correttamente la grandezza della jump table per garantire la qualità del disassembly prodotto.
-    \item \textbf{Position-Independent Code (PIC)}: Molti compilatori generano codice che può essere caricato ed eseguito indipendentemente dalla specifica sezione dello spazio di indirizzamento in cui vene caricato il programma.
+    \item \textbf{Position-Independent Code (PIC)}: Molti compilatori generano codice che può essere caricato ed eseguito indipendentemente dalla specifica sezione dello spazio di indirizzamento in cui viene caricato il programma.
     Questo tipo di codice viene detto \textit{Position-Independent Code} (PIC). Quando viene prodotto PIC, il compilatore tipicamente crea delle \textit{jump tables}, anch'esse indipendenti dalla posizione e formate da una serie di offset, le quali vengono inserite all'interno della sezione dell'eseguibile dedicata al codice (la "\textit{text}" section).
-    L'offset presente all'interno di queste tabelle verrà poi sommato all'indirizzo caricato al momento pe raggiungere la posizione desiderata tramite un jump indiretto.
+    L'offset presente all'interno di queste tabelle verrà poi sommato all'indirizzo caricato al momento per raggiungere la posizione desiderata tramite un jump indiretto.
     La presenza di PIC introduce due criticità che complicano il processo di disassembly:
     \begin{itemize}
         \item Le tabelle sono \textbf{indistinguibili dai dati presenti nell'eseguibile}
@@ -161,7 +161,7 @@ Lo scopo di un \textit{decompiler} (o \textit{reverse compiler}) è quindi quell
 operazioni del programma binario dato in input. Per effettuare il recupero del codice di un programma, un \textit{decompiler} deve gestire una molteplicità di problemi sia teorici che pratici, tra cui \cite{Cifuentes1994ReverseCT}:
 \begin{itemize}
     \item \textbf{Problemi di rappresentazione}: Nell'architettura di Von Neumann, sia le istruzioni che i dati sono rappresentati nello stesso modo. Dato un byte in memoria, è impossibile determinare se esso rappresenta un'istruzione, un dato (o entrambi) fino a quando quel byte non verrà estratto dalla memoria, posto in un registro e utilizzato di conseguenza.
-    \item \textbf{Codice auto-modificante}: Il \textit{codice auto-modificante} (self-modifying code) si riferisce ad istruzioni o dati preimpostati in memoria che vengono modificati durante l'esecuzione del programma. Un byte in una posizione di memoria può essere modificato per rappresentare un'altra istruzione o un'altro dato. Questa tecnica era particolarmente rilevante durante gli anni '60 e '70; quando
+    \item \textbf{Codice auto-modificante}: Il \textit{codice auto-modificante} (self-modifying code) si riferisce ad istruzioni o dati preimpostati in memoria che vengono modificati durante l'esecuzione del programma. Un byte in una posizione di memoria può essere modificato per rappresentare un'altra istruzione o un altro dato. Questa tecnica era particolarmente rilevante durante gli anni '60 e '70; quando
     i limiti sulla grandezza della memoria dei calcolatori ne imponevano un utilizzo efficiente. Un modo per ottimizzarne l'uso era di modificare i byte caricati in una certa parte della memoria in modo tale che essi potessero essere riutilizzati come istruzioni o come dati a runtime. La presenza di codice auto-modificante rende più complesso effettuare il decompiling del programma, poiché il decompiler
     dovrà tenere in considerazione le modifiche introdotte da questa tecnica per recuperare il codice ad alto livello corretto.
     \item \textbf{Subroutine incluse da compilatori e linker}: Quando un programma viene compilato, il compilatore e il linker inseriscono una grande quantità di subroutine legate alle funzioni che queste due componenti svolgono.
@@ -188,7 +188,7 @@ Concettualmente, un \textit{decompiler} è strutturato in maniera simile ad un c
     \item \textbf{Back-end}:
     \begin{itemize}
         \item Questo modulo si occupa della generazione del codice decompilato. Esso è quindi \textbf{dipendente dal linguaggio di programmazione in cui si vuole avere il risultato finale}
-        \item Effettua, opzionalmente, un'ulteriore ristrutturazione del CFG, in modo tale che i costrutti specifici presenti nel linguaggio obbiettivo ma non presenti nel generico insieme di costrutti generato durante la fase precedente vengano utilizzati.
+        \item Effettua, opzionalmente, un'ulteriore ristrutturazione del CFG, in modo tale che i costrutti specifici presenti nel linguaggio obiettivo ma non presenti nel generico insieme di costrutti generato durante la fase precedente vengano utilizzati.
         \item Infine, il modulo genera il codice ad alto livello (codice decompilato)
     \end{itemize}
 \end{enumerate}

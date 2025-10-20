@@ -9,7 +9,7 @@ In particolare, verranno illustrate quali metodologie di analisi ogni tecnica ut
 di particolari classi di vulnerabilità.
 \section{VulnDetect}
 Le tecniche che si basano sull'esecuzione simbolica devono tenere conto del problema noto con il nome di \textit{path explosion}: l'incremento delle
-dimensioni di un programma porta ad un aumento esponenziale dei cammini praticabili presenti sul suo CFG, i quali possono crescere fino a diventare
+dimensioni di un programma porta a un aumento esponenziale dei cammini praticabili presenti sul suo CFG, i quali possono crescere fino a diventare
 potenzialmente infiniti se il programma contiene cicli non vincolati da una condizione di terminazione \cite{SE_Path_explosion}. 
 Per evitare questo problema, l'esecutore simbolico può essere guidato in modo tale che esplori solamente una parte del CFG del programma, in modo tale da evitare che esso
 esplori cammini potenzialmente inutili alla ricerca di vulnerabilità. \textbf{VulnDetect} \cite{VulnDetect} è una tecnica di ricerca basata su esecuzione simbolica per la ricerca
@@ -55,7 +55,7 @@ In particolare, l'esecuzione simbolica dinamica presenta una pessima scalabilit�
 A questo si aggiunge il problema, presente in tutte le tecniche di analisi dinamica, della bassa copertura in termini di codice analizzato.
 Per essere utile all'analista, una tecnica di ricerca automatica delle vulnerabilità deve soddisfare due requisiti cruciali: la \textbf{generalità}, ossia la capacità di poter essere impiegata
 su un ampio spettro di programmi, e \textbf{l'accuratezza}, la quale richiede di introdurre un numero di falsi positivi quanto più minimale possibile.
-Le tecniche di \textbf{analisi ibrida} si configurano quindi come una scelta particolarmente adatta a questo scopo, in quanto combinano i punti di forza sia di analisi dinamica e statica, permettendo così di mitigarne
+Le tecniche di \textbf{analisi ibrida} si configurano quindi come una scelta particolarmente adatta a questo scopo, in quanto combinano i punti di forza sia dell'analisi dinamica che statica, permettendo così di mitigarne
 le problematiche. \textbf{Arbiter} \cite{Arbier} è una tecnica ibrida di ricerca automatica di vulnerabilità, progettata per individuare la presenza di diverse classi di vulnerabilità attraverso una combinazione di analisi statiche e dinamiche.
 La metodologia di analisi proposta da \textit{Arbiter} permette di mitigare il numero di falsi positivi introdotti dalle tecniche di analisi statica, mantenendo al contempo una buona scalabilità al crescere delle dimensioni del programma analizzato.
 L'implementazione delle tecniche di analisi usate da \textit{Arbiter} sfrutta le funzionalità messe a disposizione dal framework di analisi \textit{angr}.
@@ -69,19 +69,19 @@ Arbiter è capace di rilevare tutte quelle vulnerabilità che rispettano la segu
     \item \textbf{(P2): Sorgenti e sink facilmente identificabili}: Le sorgenti di input e i loro sink devono essere facilmente identificabili, cioè devono poter essere identificati tramite l'analisi di artefatti che è possibile
     produrre in maniera computazionalmente efficiente, come per esempio, un CFG.
     \item \textbf{(P3): Aliasing determinato dal flusso di esecuzione}: Le informazioni riguardanti l'accesso alla stessa area di memoria attraverso \textit{aliasing} devono essere recuperabili semplicemente analizzando il flusso d'esecuzione del programma.
-    Questa proprietà risulta vera solamente quando il programma non effettua nessuna \textbf{deferenziazione di puntatori} oppure quando la deferenziazione può essere \textbf{risolta ad un singolo oggetto} determinato interamente dal flusso di esecuzione del programma.
+    Questa proprietà risulta vera solamente quando il programma non effettua nessuna \textbf{dereferenziazione di puntatori} oppure quando la dereferenziazione può essere \textbf{risolta ad un singolo oggetto} determinato interamente dal flusso di esecuzione del programma.
 \end{itemize}
-Chiameremo una vulnerabilità \textit{property-compliant} (PC) quando essa rispetta tutte e tre le proprietà descritte sopra. Tuttavia, è necessario notare che la condizioni sulla deferenziazione dei puntatori descritte nella proprietà \textit{P3} portano
+Chiameremo una vulnerabilità \textit{property-compliant} (PC) quando essa rispetta tutte e tre le proprietà descritte sopra. Tuttavia, è necessario notare che la condizioni sulla dereferenziazione dei puntatori descritte nella proprietà \textit{P3} portano
 l'analisi a barattare ad una perdita di generalità in cambio di un aumento dell'efficienza.
 \subsection{Vulnerability descriptions} 
 Per effettuare l'analisi per ogni classe di vulnerabilità \textit{property-compliant}, \textit{Arbiter} utilizza una descrizione, specifica per ogni vulnerabilità, delle proprietà descritte sopra chiamata \textit{Vulnerability description} (VD).
-Una VD è una \textbf{rappresentazione programmatica in linguaggio python} dei vari artefatti statici e simbolici inerenti ad ogni proprietà che una vulnerabilità property-compliant deve rispettare.
+Una VD è una \textbf{rappresentazione programmatica in linguaggio Python} dei vari artefatti statici e simbolici inerenti ad ogni proprietà che una vulnerabilità property-compliant deve rispettare.
 Una VD contiene le seguenti funzioni:
 \begin{itemize}
-    \item \textbf{specify\_sources(binary)}: Questa funzione deve ritornare un dizionario contenete tutte le sorgenti di input (funzioni) potenzialmente malevole  del programma. Ad ogni chiave del dizionario può
+    \item \textbf{specify\_sources(binary)}: Questa funzione deve ritornare un dizionario contenente tutte le sorgenti di input (funzioni) potenzialmente malevole  del programma. Ad ogni chiave del dizionario può
     essere associato il valore numerico $0$, il quale indicherà ad \textit{Arbiter} di tracciare il flusso di dati generato dal valore di ritorno della funzione, oppure un valore numerico $i > 0$, il quale indicherà ad \textit{Arbiter} di
     tracciare il flusso di dati generato dal parametro $i$-esimo della funzione.
-    \item \textbf{specify\_sinks(binary)}: Similmente a \textit{specify\_sources}, questa funzione deve ritornare un dizionario contenete tutti i potenziali sink (funzioni) dei flussi di dati vulnerabili. Ad ogni funzione nel dizionario è associata una lista di caratteri così strutturata:
+    \item \textbf{specify\_sinks(binary)}: Similmente a \textit{specify\_sources}, questa funzione deve ritornare un dizionario contenente tutti i potenziali sink (funzioni) dei flussi di dati vulnerabili. Ad ogni funzione nel dizionario è associata una lista di caratteri così strutturata:
     \begin{itemize}
         \item Se la cella $j$-esima contiene il carattere $n$, allora \textit{Arbiter} considererà i flussi di dati che arrivano ad essere utilizzati come parametro $j$-esimo della funzione.
         \item Se la cella $j$-esima contiene il carattere $c$, allora \textit{Arbiter} ignorerà i flussi di dati che arrivano ad essere utilizzati come parametro $j$-esimo della funzione
@@ -111,7 +111,7 @@ Inoltre, è possibile creare delle VD per le seguenti classi di vulnerabilità:
 CWE     & Descrizione                                        & Sorgente                        & Sink                                                                                                   \\ \hline
 CWE-78 & OS Command injection& 1° argomento di sprintf() & 1° argomento di system()                                                                               \\ \hline
 CWE-190 & Integer overflow or Wraparound                           & Operazione aritmetica sul valore di ritorno di sizeof()         & Qualsiasi parametro di funzione di tipo size\_t                                                           \\ \hline
-CWE-676 & Use of potentially dangerous function                             & Qualsiasi funzione   & 1° argomento di strcopy()                              \\ \hline
+CWE-676 & Use of potentially dangerous function                             & Qualsiasi funzione   & 1° argomento di strcpy()                              \\ \hline
 CWE-120 & Classic buffer overflow     & 2° argomento di read() & 1° argomento di memcpy()                                                                                \\ \hline
 \end{tabularx}
 \caption{Classi di vulnerabilità per le quali è possibile scrivere una VD}
@@ -124,10 +124,10 @@ Allora, \textit{Arbiter} struttura la strategia di analisi per $V$ nelle seguent
     \item \textbf{Subject Caller Identification}: \textit{Arbiter} utilizza il CFG e le informazioni presenti nella VD di $V$ per identificare nel programma le sorgenti di input potenzialmente malevole e i loro sink. 
     \item \textbf{Data Dependency Recovery}: Viene costruito un DDG per ogni funzione che contiene almeno una sorgente o un sink descritto nella VD di $V$. 
     Se la VD di $V$ descrive sia sorgenti che sink, allora il DDG costruito per una certa funzione $f$ non conterrà alcuna informazione riguardante le funzioni che
-    chiamano $f$. Altrimenti, verrà costruito un DDG per ogni funzione, sia chiamata che chiamante, che contiene almeno un sink descritto nella VD, invece di costruire in DDG che copra
+    chiamano $f$. Altrimenti, verrà costruito un DDG per ogni funzione, sia chiamata che chiamante, che contiene almeno un sink descritto nella VD, invece di costruire un DDG che copra
     tutte le potenziali sorgenti di input. Questo meccanismo rende la generazione del DDG per il programma più scalabile, al costo, tuttavia, di una perdita di precisione; la quale verrà
     corretta durante la fase di verifica finale dei risultati.
-    \item \textbf{Backward Slicing e Filtering}: L'identificazione dei flussi potenzialmente vulnerabili avviene tracciando i cammini che collegano le sorgenti ai sink sul DDG e generando i \textbf{sotto-grafi}
+    \item \textbf{Backward Slicing e Filtering}: L'identificazione dei flussi potenzialmente vulnerabili avviene tracciando i cammini che collegano le sorgenti ai sink sul DDG e generando i \textbf{sottografi}
     corrispondenti a tali cammini. Tale processo è equivalente all'effettuare un \textit{program slicing} statico sul programma per ogni flusso di interesse.
     \item \textbf{Under Constrained Symbolic Execution (UCSE)}: I flussi di dati raccolti durante le fasi precedenti potrebbero non essere realmente vulnerabili: la path condition che caratterizza un determinato flusso di dati
     potrebbe infatti risultare \textbf{insoddisfacibile} oppure potrebbe \textbf{prevenire il manifestarsi della vulnerabilità $V$ di interesse}. Per ogni flusso di dati individuato, \textit{Arbiter} esegue una \textit{UCSE} sulla
@@ -136,7 +136,7 @@ Allora, \textit{Arbiter} struttura la strategia di analisi per $V$ nelle seguent
     \item \textbf{Adaptive False Positive Reduction}: Come già discusso nel \textit{capitolo 4}, uno dei problemi della UCSE è la mancanza di informazione riguardante il contesto di esecuzione della funzione analizzata. Per mitigare
     il numero di falsi positivi introdotti da questa problematica, \textit{Arbiter} effettua la seguente serie di operazioni:
     \begin{enumerate}
-        \item Quando viene trovata una potenziale vulnerabilità in una funzione $f$, \textit{Arbiter} effettua una ricerca tutti i punti nel programma dove $f$ viene chiamata
+        \item Quando viene trovata una potenziale vulnerabilità in una funzione $f$, \textit{Arbiter} effettua una ricerca di tutti i punti nel programma dove $f$ viene chiamata
         \item Per ogni punto di chiamata $C$ individuato, viene ripetuta la UCSE includendo il contesto dato da $C$
     \end{enumerate}
     Questa serie di operazioni viene ripetuta \textbf{ricorsivamente} fino a raggiungere una \textbf{profondità massima di ricorsione}, la quale è configurabile dall'analista in base al tempo disponibile per effettuare l'analisi.

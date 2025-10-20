@@ -46,12 +46,12 @@ Bintaint è composto da quattro moduli distinti:
     \item \textbf{TCFG Generation Module}: Questo modulo si occupa di generare una struttura a grafo diretta chiamata \textit{Taint Control Flow Graph}, la quale rappresenterà tutte le possibili aree del programma che un determinato flusso tainted può raggiungere.
     L'analisi del TCFG permetterà quindi di evincere se un determinato sink dipende dai dati generati da una determinata sorgente.
 \end{itemize}
-L'approccio proposto dal tool permette di ridurre il numero di falsi positivi e falsi negativi rilevati rispetto ad una tain analysis tradizionale; inoltre, l'utilizzo del linguaggio intermedio REIL
+L'approccio proposto dal tool permette di ridurre il numero di falsi positivi e falsi negativi rilevati rispetto ad una taint analysis tradizionale; inoltre, l'utilizzo del linguaggio intermedio REIL
 permette al tool di essere facilmente integrabile in sistemi di analisi più complessi, a patto che anch'essi utilizzino lo stesso linguaggio di rappresentazione intermedia. 
 Tuttavia il tool risulta comunque dipendente dall'input dell'analista; l'accuratezza dell'analisi dipenderà quindi dalla corretta definizione di sorgenti, sink e propagazione da parte
 di quest'ultimo. Infine, Bintaint si basa sul framework commerciale IDA, il quale non offre tutte le sue funzionalità nella sua versione gratuita.
 \subsection{Binary Code Similarity Detection}
-Quando l'obbiettivo dell'analisi è ricercare una vulnerabilità nota (per esempio, una debolezza già documentata), è possibile adottare una strategia chiamata \textit{Binary Code Similarity Detection} (BCSD).
+Quando l'obiettivo dell'analisi è ricercare una vulnerabilità nota (per esempio, una debolezza già documentata), è possibile adottare una strategia chiamata \textit{Binary Code Similarity Detection} (BCSD).
 Questo approccio si basa sul confronto del codice binario del programma in esame con la firma (il codice binario) della vulnerabilità.
 Se l'algoritmo di analisi rileva segmenti di codice con un elevato grado di somiglianza con la firma della vulnerabilità, allora è altamente probabile che il programma
 contenga quella vulnerabilità. Un algoritmo di decisione determinerà se il programma contiene effettivamente la vulnerabilità.
@@ -62,7 +62,7 @@ saranno molto simili; potenzialmente portando l'analizzatore a segnalare dei fal
     \item \textbf{Re-ottimizzazione del linguaggio di rappresentazione intermedia (IR)}: Il codice assembly viene dapprima tradotto nel linguaggio di rappresentazione intermedia VEX-IR, il quale utilizzo
     mira ad appiattire le eventuali differenze sintattiche derivanti dall'utilizzo di registri diversi, istruzioni diverse per l'assegnamento o metodologie di ottimizzazione introdotte dai vari compilatori.
     Successivamente, viene applicata un'ulteriore ottimizzazione sul codice intermedio per eliminare le differenze residue che potrebbero ancora persistere a causa delle diverse tecniche di ottimizzazione dei compilatori.
-    \item \textbf{Program Slicing}: Il program slicing è una tecnica di anali statica che, partendo da un sottoinsieme dei comportamenti di un programma, ne produce una versione minimale, chiamata "slice",  la quale mantiene esattamente lo stesso sottoinsieme di comportamenti.
+    \item \textbf{Program Slicing}: Il program slicing è una tecnica di analisi statica che, partendo da un sottoinsieme dei comportamenti di un programma, ne produce una versione minimale, chiamata "slice",  la quale mantiene esattamente lo stesso sottoinsieme di comportamenti.
     Poiché questa tecnica è alla base delle analisi offerte dalla piattaforma, verrà ulteriormente approfondita nel \textit{Capitolo 3} di questa tesi.
     \item \textbf{Strand normalization}: Una "strand" è definita come l'insieme di istruzioni contigue richieste per computare il valore di una specifica variabile \cite{Statistical_similarities_in_binaries}.
     Gli strand vengono normalizzati rinominando i registri utilizzati durante le varie operazioni, andando così ad eliminare eventuali differenze sintattiche introdotte dai compilatori
@@ -122,8 +122,8 @@ risultare sfruttabile da un potenziale attaccante.
 Questa tecnica viene implementata attraverso programmi specializzati, chiamati \textit{fuzzers}; un esempio noto è \textbf{American Fuzzy Lop} (AFL).
 Generalmente, i principali componenti del fuzzing (e di un fuzzer) sono\cite{Fuzzing_soa}:
 \begin{itemize}
-    \item \textbf{Programma obbiettivo}: Il programma da analizzare, il quale può essere rappresentato sia dal suo codice binario sia dal suo codice sorgente. Poiché l'accesso a quest'ultimo è a volte ostico in situazioni reali, i software di fuzzing hanno spesso
-    come programma obbiettivo il solo codice binario.
+    \item \textbf{Programma obiettivo}: Il programma da analizzare, il quale può essere rappresentato sia dal suo codice binario sia dal suo codice sorgente. Poiché l'accesso a quest'ultimo è a volte ostico in situazioni reali, i software di fuzzing hanno spesso
+    come programma obiettivo il solo codice binario.
     \item \textbf{Monitor}: Raccoglie informazioni riguardanti l'esecuzione del programma.
     \item \textbf{Input generator}: Si occupa della generazione degli input, la quale può avvenire in due modi distinti:
     \begin{itemize}
@@ -143,7 +143,7 @@ Inoltre, le tecniche di fuzzing possono essere divise in tre categorie \cite{Fuz
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.65\textwidth]{../images/Fuzzing.png}
-    \caption{Funzionamento generale di un fuzzer. Immagine proveniente da \cite{Fuzzing_soa}}
+    \caption{Schema di funzionamento generale di un fuzzer. Immagine proveniente da \cite{Fuzzing_soa}}
 \end{figure}
 Seppur sia una tecnica efficiente e ben conosciuta per effettuare l'analisi di un programma, il fuzzing risente di diverse problematiche, come la necessità, nei fuzzer gray-box e black-box, di generare un input che passi i controlli di sanificazione del programma senza avere
 informazioni su quest'ultimo, permettendo così un'analisi più approfondita. Altra problematica è quella legata alla definizione, nei fuzzer mutation-based, di una buona tecnica di mutazione dell'input, in modo da poter analizzare il maggior numero
@@ -156,7 +156,7 @@ Le tecniche di apprendimento automatico possono essere divise in base a come avv
 \begin{itemize}
     \item \textbf{Apprendimento supervisionato}: Si sviluppa un modello predittivo tramite l'addestramento su dati etichettati.
     \item \textbf{Apprendimento non supervisionato}: Il modello viene applicato su un insieme di dati non etichettati con lo scopo di trovare una qualche struttura intrinseca del dataset
-    \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obbiettivo, ricevendo una ricompensa o una penalità in base a quanto la scelta che ha compiuto lo avvicina all'obbiettivo
+    \item \textbf{Apprendimento per rinforzo}: Il modello apprende come raggiungere un dato obiettivo, ricevendo una ricompensa o una penalità in base a quanto la scelta che ha compiuto lo avvicina all'obiettivo
 \end{itemize}
 In generale, le tecniche di machine learning per la ricerca di vulnerabilità prevedono l'estrazione di feature significative dal file binario sotto analisi; le quali verranno poi codificate in un formato idoneo e utilizzate
 dal modello per l'identificazione di potenziali percorsi di esecuzione vulnerabili \cite{ML_Survey}.

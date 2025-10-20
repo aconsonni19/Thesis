@@ -5,7 +5,7 @@
 \chapter{Sperimentazione}
 In questo capitolo, verranno presentati e analizzati i risultati ottenuti dall'applicazione
 delle strategie di analisi disponibili sulla piattaforma (\textit{Arbiter} e \textit{Binoculars}).
-Per ogni classe di vulnerabilità considerata, sono stati considerati sia programmi vulnerabili che
+Per ogni classe di vulnerabilità considerata, sono stati considerati sia programmi vulnerabili
 che non vulnerabili.
 \section{Sperimentazioni con VulnDetect}
 Come già esposto nel \textit{capitolo 5}, la strategia di analisi implementata da \textit{VulnDetect} è capace
@@ -25,7 +25,7 @@ vulnerabile a \textit{stack-based buffer overflow}. I risultati presentati da \t
         0x40118b & CWE-121: Stack-based buffer overflow  & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
         0x40117a & CWE-121: Stack-based buffer overflow & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
         \end{tabular}
-        \caption{Vulnerabilità rilevate da VulnDetect sul programma ahgets1-bad}
+        \caption{Vulnerabilità rilevate da \textit{VulnDetect} sul programma ahgets1-bad}
         \end{table}
 \subsection{Test 2: gets1-bad}
 Come il precedente, anche questo programma proviene da una delle test suite messe a disposizione dal \textit{SARD}.
@@ -41,14 +41,14 @@ a \textit{stack-based buffer overflow}. Anche in questo caso, i risultati presen
     0x401159 & CWE-121: Stack-based buffer overflow  & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
     0x40118d & CWE-121: Stack-based buffer overflow & \begin{tabular}[c]{@{}l@{}}A potential instruction pointer \\ hijack by user input was detected\end{tabular} \\ \hline
     \end{tabular}
-    \caption{Vulnerabilità rilevate da VulnDetect sul programma gets1-bad}
+    \caption{Vulnerabilità rilevate da \textit{VulnDetect} sul programma gets1-bad}
 \end{table}
 \newpage
 \subsection{Test 3: gets1-good}
 Questo programma contiene una versione corretta e non vulnerabile del codice presentato per il programma \textit{gets1-bad}.
 Il codice del programma è quindi il seguente:
 \lstinputlisting[language = C, caption = Codice del programma \textit{gets1-good}]{../tests/VulnDetect/gets1-good.c}
-Ill risultato ottenuto dell'analisi del programma con \textit{VulnDetect} è anche in questo caso quello atteso: il programma non risulta vulnerabile
+Il risultato ottenuto dell'analisi del programma con \textit{VulnDetect} è anche in questo caso quello atteso: il programma non risulta vulnerabile
 a \textit{stack-based buffer overflow}.
 \section{Sperimentazioni con Arbiter}
 \textit{Arbiter} è capace di rilevare quattro classi di vulnerabilità:
@@ -61,7 +61,7 @@ a \textit{stack-based buffer overflow}.
     \item \textbf{CWE-252: Unchecked return value}: Un errore comune da parte di un programmatore è l'assumere che l'esecuzione di una certa funzione vada sempre a buon fine oppure che ritorni sempre
     un valore tra quelli previsti. Tuttavia, se un attaccante riesce a far fallire l'esecuzione della funzione, allora il programma potrebbe trovarsi in uno stato diverso da quello assunto
     dal programmatore e quindi potrebbe risultare vulnerabile.
-    \item \textbf{CWE-337: Predictable seed in pseudo-random number generator}: La sicurezza di un generatore \textit{pseudo-casuale} di numeri dipende interamente sull'impredicibilità del seed con cui è stato
+    \item \textbf{CWE-337: Predictable seed in pseudo-random number generator}: La sicurezza di un generatore \textit{pseudo-casuale} di numeri dipende interamente dall'impredicibilità del seed con cui è stato
     inizializzato. Se un attaccante è in grado di predire il seed che verrà usato per il generatore, allora sarà anche in grado di predire i valori casuali che verranno utilizzati dal programma, rendendolo potenzialmente vulnerabile
     se questi numeri verranno utilizzati per svolgere operazioni sensibili (come, per esempio, la generazione di una chiave crittografica).
 \end{itemize}
@@ -137,9 +137,9 @@ A differenza del test precedente, l'analisi effettuata da \textit{Arbiter} non r
     \caption{Risultati ottenuti da \textit{Arbiter} sul programma riportato nel listing 7.7}
 \end{table}
 \subsection{Test effettuato per CWE-252}
-Consideriamo il seguente programma Vulnerabile a \textit{CWE-252}:
+Consideriamo il seguente programma vulnerabile a \textit{CWE-252}:
 \lstinputlisting[language = C, caption = Un programma in \textit{C} vulnerabile a CWE-252]{../tests/Arbiter/CWE-252-bad.c}
-Il mancato controllo sul valore di ritorno di \textit{setuid} porta il programma sopra riportato porta il programma ad essere potenzialmente
+Il mancato controllo sul valore di ritorno di \textit{setuid} porta il programma sopra riportato ad essere potenzialmente
 vulnerabile: se infatti l'operazione svolta da \textit{setuid} fallisce, allora il programma potrebbe comunque continuare l'esecuzione
 mantenendo i privilegi originari. In un programma più complesso, questo tipo di vulnerabilità potrebbe permettere all'attaccante di eseguire, tramite
 il programma, operazioni sensibili di solito riservate ad utenti con privilegi di amministrazione del sistema. Nonostante sia vulnerabile, \textit{Arbiter} non è in grado
